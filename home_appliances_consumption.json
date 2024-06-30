@@ -1,0 +1,17 @@
+{
+    "Refrigerator": {"consumption": [300,1000], "time": "0-24"},
+    "Electric Oven": {"consumption": [2000,5000], "time": "16-16:30,21:21:30"},
+    "Electric Kettle": {"consumption": [1500], "time": "7-7:15,12-12:15,16:30-17,21:30-22"},
+    "Air Conditioner": {"consumption": [500,3000], "time": "0-24"},
+    "Incandescent Light Bulbs": {"consumption": [60], "time":"0-24"},
+    "LED Light Bulbs": {"consumption": [10], "time": "0-24"},
+    "Laptop": {"consumption": [50,100], "time":"0-24"},
+    "Computer": {"consumption": [100, 600], "time": "0-24"},
+    "LCD Monitor": {"consumption": [50,300], "time": "10-12,16-20,22-24"},
+    "Router": {"consumption": [5,20], "time":"0-24"},
+    "Smartphone Charger": {"consumption": [5], "time":"0-24"},
+    "Blow Dryer": {"consumption": [800,1800], "time":"7-7:30,15-15:30"},
+    "Iron": {"consumption": [1000,1000], "time":"7-7:30,15-15:30"},
+    "Washing Machine" : {"consumption": [500,1000], "time":"17-19"},
+    "Water Heater" : {"consumption": [1000,4000], "time":"12-4"}
+}

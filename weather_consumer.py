@@ -4,7 +4,7 @@ from Kafka_consumer import Kafka_consumer
 
 
 def main():
-    consumer = Kafka_consumer(topic_name = ["weather_il8n"])
+    consumer = Kafka_consumer(topic_name = ["weather_processed"])
     consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
                                  consumer_group = "weather_reader",
                                  auto_offset_reset = "earliest")

@@ -14,7 +14,7 @@ def get_weather():
 
 
 def main():
-    producer = Kafka_producer(topic_name = "weather_data_demo", message_key = "Cairo") 
+    producer = Kafka_producer(topic_name = "weather_data", message_key = "Cairo") 
     producer.kafka_producer_conf(broker_address = "localhost:9092")
 
     while True:
@@ -22,7 +22,7 @@ def main():
         logging.debug("Got Weather: %s", weather)
 
         producer.kafka_produce(message_value = weather)
-        logging.debug(f"Produced a message in weather_data_demo topic")
+        logging.debug("Produced a message in weather_data_demo topic")
         time.sleep(60)
 
 

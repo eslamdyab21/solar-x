@@ -37,7 +37,7 @@ def get_solar_energy(msg):
 
 def main():
     consumer = Kafka_consumer(topic_name = ["weather_data"])
-    consumer.kafka_producer_conf(broker_address = "localhost:9092", 
+    consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
                                  consumer_group = "weather_reader4solar",
                                  auto_offset_reset = "latest")
 

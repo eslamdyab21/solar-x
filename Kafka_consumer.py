@@ -6,7 +6,7 @@ class Kafka_consumer():
 
         
 
-    def kafka_producer_conf(self, broker_address, consumer_group, auto_offset_reset):
+    def kafka_consumer_conf(self, broker_address, consumer_group, auto_offset_reset):
         self.app = Application(
             broker_address = broker_address,
             loglevel = "DEBUG",

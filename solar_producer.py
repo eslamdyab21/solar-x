@@ -6,9 +6,37 @@ from Kafka_producer import Kafka_producer
 
 
 
+solar_power_w_accumulated = 0
+def get_solar_energy(msg):
+    global solar_power_w_accumulated
+    # time_stamp = msg["current"]["time"]
+    time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+    is_day = msg["current"]["is_day"]
+    wind_speed = msg["current"]["wind_speed_10m"]
+    cloud_cover_percentage = msg["current"]["cloud_cover"]
+    celcius = msg["current"]["temperature_2m"]
+    solar_power_w = 100 * is_day * (wind_speed / (celcius * (1 - cloud_cover_percentage/100)))
+    
+    
+    if solar_power_w_accumulated is None:
+        solar_power_w_accumulated = solar_power_w
+    else:
+        solar_power_w_accumulated  += solar_power_w
+    solar_power_w_accumulated = solar_power_w_accumulated
+
+    if time_stamp.split()[1].split(':')[0] == "24":
+        solar_power_w_accumulated = 0
+
+    new_msg = {
+        "solar_power_w" : round(solar_power_w, 2),
+        "solar_power_w_accum" : round(solar_power_w_accumulated, 2)
+    }
+
+    return new_msg
+
 
 def main():
-    consumer = Kafka_consumer(topic_name = ["weather_data_demo"])
+    consumer = Kafka_consumer(topic_name = ["weather_data"])
     consumer.kafka_producer_conf(broker_address = "localhost:9092", 
                                  consumer_group = "weather_reader4solar",
                                  auto_offset_reset = "latest")

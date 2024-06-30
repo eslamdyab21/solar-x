@@ -22,6 +22,10 @@ def process_weather(msg,  state: State):
         solar_power_w_accumulated  += solar_power_w
     state.set('solar_power_w_accumulated', solar_power_w_accumulated)
 
+
+    if time_stamp.split()[1].split(':')[0] == "24":
+        solar_power_w_accumulated = 0
+    
     new_msg = {
         "time_stamp" : time_stamp,
         "celcius" : celcius,

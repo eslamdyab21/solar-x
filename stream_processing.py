@@ -1,9 +1,9 @@
 from quixstreams import Application, State
 import datetime
 
-solar_power_w_accumulated = 0
-def process_weather(msg):
-    global solar_power_w_accumulated
+
+
+def process_weather(msg,  state: State):
     # time_stamp = msg["current"]["time"]
     time_stamp = str(datetime.datetime.now().replace(microsecond=0))
     is_day = msg["current"]["is_day"]
@@ -14,10 +14,13 @@ def process_weather(msg):
     solar_power_w = solar_panel_size * is_day * (wind_speed / (celcius * (1 - cloud_cover_percentage/100)))
     
     
+    solar_power_w_accumulated = state.get('solar_power_w_accumulated')
+    
     if solar_power_w_accumulated is None:
         solar_power_w_accumulated = solar_power_w
     else:
         solar_power_w_accumulated  += solar_power_w
+    state.set('solar_power_w_accumulated', solar_power_w_accumulated)
 
     new_msg = {
         "time_stamp" : time_stamp,
@@ -46,7 +49,7 @@ def main():
 
 
     sdf = app.dataframe(input_topic)
-    sdf = sdf.apply(process_weather)
+    sdf = sdf.apply(process_weather, stateful=True)
     sdf = sdf.to_topic(output_topic)
 
 

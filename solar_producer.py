@@ -15,14 +15,14 @@ def get_solar_energy(msg):
     wind_speed = msg["current"]["wind_speed_10m"]
     cloud_cover_percentage = msg["current"]["cloud_cover"]
     celcius = msg["current"]["temperature_2m"]
-    solar_power_w = 100 * is_day * (wind_speed / (celcius * (1 - cloud_cover_percentage/100)))
+    solar_panel_size = 100
+    solar_power_w = solar_panel_size * is_day * (wind_speed / (celcius * (1 - cloud_cover_percentage/100)))
     
     
     if solar_power_w_accumulated is None:
         solar_power_w_accumulated = solar_power_w
     else:
         solar_power_w_accumulated  += solar_power_w
-    solar_power_w_accumulated = solar_power_w_accumulated
 
     if time_stamp.split()[1].split(':')[0] == "24":
         solar_power_w_accumulated = 0

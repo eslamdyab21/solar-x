@@ -18,10 +18,10 @@ class Kafka_consumer():
         self.consumer.subscribe(self.topic_name)
 
     
-    def consume(self, timeout):
+    def consume(self, timeout, store_offset = False):
 
         msg = self.consumer.poll(timeout)
-        if msg:
+        if msg and store_offset:
             self.consumer.store_offsets(msg)
 
         return msg

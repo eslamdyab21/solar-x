@@ -10,18 +10,6 @@ def process_weather(msg,  state: State):
     wind_speed = msg["current"]["wind_speed_10m"]
     cloud_cover_percentage = msg["current"]["cloud_cover"]
     celcius = msg["current"]["temperature_2m"]
-    solar_panel_size = 100
-    solar_power_w = solar_panel_size * is_day * (wind_speed / (celcius * (1 - cloud_cover_percentage/100)))
-    
-    
-    solar_power_w_accumulated = state.get('solar_power_w_accumulated')
-    
-    if solar_power_w_accumulated is None:
-        solar_power_w_accumulated = solar_power_w
-    else:
-        solar_power_w_accumulated  += solar_power_w
-    state.set('solar_power_w_accumulated', solar_power_w_accumulated)
-
 
     if time_stamp.split()[1].split(':')[0] == "24":
         solar_power_w_accumulated = 0
@@ -31,9 +19,7 @@ def process_weather(msg,  state: State):
         "celcius" : celcius,
         "wind_speed" : wind_speed,
         "cloud_cover_percentage" : cloud_cover_percentage,
-        "is_day" : is_day,
-        "solar_power_w" : round(solar_power_w, 2),
-        "solar_power_w_accum" : round(solar_power_w_accumulated, 2)
+        "is_day" : is_day
     }
 
     return new_msg

@@ -1,24 +1,56 @@
 import json
 import logging
 import datetime 
+import random
 from Kafka_consumer import Kafka_consumer
 from Kafka_producer import Kafka_producer
 
 
-
 solar_power_w_accumulated = 0
+
+
+def get_time_in_seconds(t):
+    hours = int(t.split(':')[0])*3600
+    minutes = int(t.split(':')[1])*60
+    seconds = int(t.split(':')[2])
+
+    return hours + minutes + seconds
+
+
 def get_solar_energy(msg):
     global solar_power_w_accumulated
-    # time_stamp = msg["current"]["time"]
+    print(msg)
     time_stamp = str(datetime.datetime.now().replace(microsecond=0))
     is_day = msg["current"]["is_day"]
     wind_speed = msg["current"]["wind_speed_10m"]
     cloud_cover_percentage = msg["current"]["cloud_cover"]
     celcius = msg["current"]["temperature_2m"]
-    solar_panel_size = 100
-    solar_power_w = solar_panel_size * is_day * (wind_speed / (celcius * (1 - cloud_cover_percentage/100)))
+    solar_panel_rating_kwh = 10
+    solar_panel_rating_w_sec = solar_panel_rating_kwh*1000/3600
+    sun_rise = msg["daily"]["sunrise"][0]
+    sun_set = msg["daily"]["sunset"][0]
+
+    sun_rise_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_rise)).split()[1])
+    sun_set_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_set)).split()[1])
+    low_peak_threshold = get_time_in_seconds('09:60:60')
+    high_peak_threshold = get_time_in_seconds('2:60:60')
+    # current_t 0 to 246060
+    # sun_rise_t:10 --> 0:100%, 10:1500 --> 100% , 15:sun_set_t --> 100%:0
+    current_t =  get_time_in_seconds(time_stamp.split()[1])
     
-    
+    if current_t >= sun_rise_t and current_t <= low_peak_threshold:
+        t_presentage = (current_t-sun_rise_t)/(low_peak_threshold-sun_rise_t)
+        
+
+    elif current_t >= low_peak_threshold and current_t <= high_peak_threshold:
+        t_presentage = 1
+
+    elif current_t >= high_peak_threshold and current_t <= sun_set_t:
+        t_presentage = (current_t-high_peak_threshold)/(sun_set_t-high_peak_threshold)
+
+    random_per = random.randint(850,1000)/1000
+    solar_power_w = solar_panel_rating_w_sec * is_day * t_presentage * (1 - cloud_cover_percentage/100) * random_per
+
     if solar_power_w_accumulated is None:
         solar_power_w_accumulated = solar_power_w
     else:
@@ -47,7 +79,7 @@ def main():
 
     value = None
     while True:
-        msg = consumer.consume(timeout = 1)
+        msg = consumer.consume(timeout = 1, store_offset = True)
 
         if msg is None:
             print("Waiting....")   

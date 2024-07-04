@@ -19,8 +19,8 @@ def get_time_in_seconds(t):
 
 def get_solar_energy(msg):
     global solar_power_w_accumulated
-    print(msg)
     time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+    # time_stamp = str(datetime.datetime.fromisoformat(msg["current"]["time"]))
     is_day = msg["current"]["is_day"]
     wind_speed = msg["current"]["wind_speed_10m"]
     cloud_cover_percentage = msg["current"]["cloud_cover"]
@@ -48,6 +48,9 @@ def get_solar_energy(msg):
     elif current_t >= high_peak_threshold and current_t <= sun_set_t:
         t_presentage = (current_t-high_peak_threshold)/(sun_set_t-high_peak_threshold)
 
+    else:
+        t_presentage = 0
+        
     random_per = random.randint(850,1000)/1000
     solar_power_w = solar_panel_rating_w_sec * is_day * t_presentage * (1 - cloud_cover_percentage/100) * random_per
 

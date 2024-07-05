@@ -7,7 +7,11 @@ from Kafka_producer import Kafka_producer
 
 
 solar_power_w_accumulated = 0
-
+solar_power_w_accumulated_hourly = 0
+prev_hour = 0
+solar_power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
+    "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+    "21":0,"22":0,"23":0,"24":0}
 
 def get_time_in_seconds(t):
     hours = int(t.split(':')[0])*3600
@@ -17,18 +21,8 @@ def get_time_in_seconds(t):
     return hours + minutes + seconds
 
 
-def get_solar_energy(msg):
-    global solar_power_w_accumulated
-    time_stamp = str(datetime.datetime.now().replace(microsecond=0))
-    # time_stamp = str(datetime.datetime.fromisoformat(msg["current"]["time"]))
-    is_day = msg["current"]["is_day"]
-    wind_speed = msg["current"]["wind_speed_10m"]
-    cloud_cover_percentage = msg["current"]["cloud_cover"]
-    celcius = msg["current"]["temperature_2m"]
-    solar_panel_rating_kwh = 10
-    solar_panel_rating_w_sec = solar_panel_rating_kwh*1000/3600
-    sun_rise = msg["daily"]["sunrise"][0]
-    sun_set = msg["daily"]["sunset"][0]
+def get_power_w_accumulated(sun_rise, sun_set, time_stamp, solar_panel_rating_w_sec, is_day, cloud_cover_percentage):
+    global solar_power_w_accumulated, solar_power_w
 
     sun_rise_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_rise)).split()[1])
     sun_set_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_set)).split()[1])
@@ -59,12 +53,52 @@ def get_solar_energy(msg):
     else:
         solar_power_w_accumulated  += solar_power_w
 
-    if time_stamp.split()[1].split(':')[0] == "24":
+    cuurent_hour = time_stamp.split()[1].split(':')[0]
+
+    if cuurent_hour == "24":
         solar_power_w_accumulated = 0
+    
+
+
+def get_power_w_accumulated_hourly(cuurent_hour):
+    global prev_hour, solar_power_w, solar_power_w_accumulated_hourly
+
+    if cuurent_hour == prev_hour:
+        solar_power_w_accumulated_hourly += solar_power_w
+    else:
+        solar_power_w_accumulated_hourly = 0
+    
+    solar_power_w_accumulated_hourly_set[cuurent_hour] = round(solar_power_w_accumulated_hourly,2)
+
+    prev_hour = cuurent_hour
+
+
+
+def get_solar_energy(msg):
+    global solar_power_w, solar_power_w_accumulated, solar_power_w_accumulated_hourly_set
+    
+    time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+    # time_stamp = str(datetime.datetime.fromisoformat(msg["current"]["time"]))
+    is_day = msg["current"]["is_day"]
+    wind_speed = msg["current"]["wind_speed_10m"]
+    cloud_cover_percentage = msg["current"]["cloud_cover"]
+    celcius = msg["current"]["temperature_2m"]
+    solar_panel_rating_kwh = 10
+    solar_panel_rating_w_sec = solar_panel_rating_kwh*1000/3600
+    sun_rise = msg["daily"]["sunrise"][0]
+    sun_set = msg["daily"]["sunset"][0]
+
+    get_power_w_accumulated(sun_rise, sun_set, time_stamp, solar_panel_rating_w_sec, is_day, cloud_cover_percentage)
+
+
+    cuurent_hour = time_stamp.split()[1].split(':')[0]
+    get_power_w_accumulated_hourly(cuurent_hour)
+    
 
     new_msg = {
         "solar_power_w" : round(solar_power_w, 2),
-        "solar_power_w_accum" : round(solar_power_w_accumulated, 2)
+        "solar_power_w_accum" : round(solar_power_w_accumulated, 2),
+        "solar_power_w_accum_hourly" : solar_power_w_accumulated_hourly_set
     }
 
     return new_msg

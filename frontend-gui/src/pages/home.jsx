@@ -1,4 +1,6 @@
 import './home.css'
+import TotalEnergyGenerated from '../components/totalEnergyGenerated/totalEergyGenerated';
+
 
 const Home = () => {
     return (
@@ -16,7 +18,7 @@ const Home = () => {
             </div>
 
             <div className="box box_1row_1col">
-                total energy generated
+                <TotalEnergyGenerated />
             </div>
 
             <div className="box box_1row_1col">

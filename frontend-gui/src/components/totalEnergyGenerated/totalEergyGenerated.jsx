@@ -1,29 +1,10 @@
-import { useEffect, useState } from 'react'
 import ChartLine from '../chartLine/chatrLine';
 import './totalEergyGenerated.css'
 
 
-const WS_URL = "ws://localhost:8080"
-const webSocket =  new WebSocket(WS_URL)
+const TotalEnergyGenerated = (props) => {
 
-
-const TotalEnergyGenerated = () => {
-    const [solarEnergy, setSolarEnergy] = useState(null)
-
-
-    useEffect( () => {
-
-        webSocket.onmessage = (msg) => {
-            const value = JSON.parse(msg.data)
-            setSolarEnergy(value)
-            console.log(value["solar_power_w_accum"].toLocaleString('en'))
-        }
-
-        // return () => {
-        //     webSocket.close();
-        // };
-    })
-
+    const solarEnergy = props.solarEnergyData
     
     return(
         <div className="topBox">

@@ -38,7 +38,7 @@ const ChartLine = (props) => {
                 <span className="percentage" style={{ color: "limegreen" }}>
                     {props.solar_power_w} w
                 </span>
-                <span className="duration">generated now</span>
+                <span className="duration">Currently</span>
             </div>
 
         </div>

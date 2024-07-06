@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react'
+import ChartLine from '../chartLine/chatrLine';
 import './totalEergyGenerated.css'
 
 
 const WS_URL = "ws://localhost:8080"
-
-
-
 const webSocket =  new WebSocket(WS_URL)
+
+
 const TotalEnergyGenerated = () => {
-    const [totalEnergy, setTotalEnergy] = useState("Waiting......")
-    
+    const [solarEnergy, setSolarEnergy] = useState(null)
+
+
     useEffect( () => {
 
         webSocket.onmessage = (msg) => {
             const value = JSON.parse(msg.data)
-            setTotalEnergy(value["solar_power_w_accum"].toLocaleString('en'))
+            setSolarEnergy(value)
             console.log(value["solar_power_w_accum"].toLocaleString('en'))
         }
 
@@ -33,9 +34,19 @@ const TotalEnergyGenerated = () => {
                 </div>
 
                 <div className="title-info">
-                    <h1>{totalEnergy} Wh</h1>
+                    {
+                        solarEnergy ? <h1>{solarEnergy["solar_power_w_accum"].toLocaleString('en')}</h1> :
+                        <h1>Waiting....</h1>
+                    }
+                    <p  style={{ color: "gold" }}>
+                        Wh
+                    </p>
                 </div>
             </div>
+
+            {solarEnergy ? <ChartLine solar_power_w = {solarEnergy["solar_power_w"]} solar_power_w_accum_hourly = {solarEnergy["solar_power_w_accum_hourly"]} dataKey="Wh" color="gold" /> :
+             <h1>Waiting....</h1>}
+
         </div>
     )
 }

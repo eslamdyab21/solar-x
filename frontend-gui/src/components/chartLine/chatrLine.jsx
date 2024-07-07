@@ -20,8 +20,9 @@ const ChartLine = (props) => {
                     <LineChart data={solar_power_w_accum_hourly_chart}>
                     <Tooltip
                         contentStyle={{ background: "transparent", border: "none" }}
-                        labelStyle={{ display: "none" }}
-                        position={{ x: -60, y: 10 }}
+                        labelStyle={{color:'gold' }}
+                        labelFormatter={(name) => 'Hour: '+ name} 
+                        position={{ x: -65, y: 10 }}
                     />
                     <Line
                         type="monotone"

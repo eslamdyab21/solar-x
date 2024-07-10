@@ -4,18 +4,27 @@ import PowerFlow from '../components/powerFlow/powerFlow';
 import './home.css'
 
 const WS_URL = "ws://localhost:8080"
+const WS2_URL = "ws://localhost:9090"
 const webSocket =  new WebSocket(WS_URL)
+const webSocket2 =  new WebSocket(WS2_URL)
 
 
 const Home = () => {
     const [solarEnergy, setSolarEnergy] = useState(null)
+    const [homeEnergy, setHomeEnergy] = useState(null)
 
     useEffect( () => {
 
         webSocket.onmessage = (msg) => {
             const value = JSON.parse(msg.data)
             setSolarEnergy(value)
-            console.log(value["solar_power_w"])
+            console.log('webSocket1', value)
+        }
+
+        webSocket2.onmessage = (msg) => {
+            const value = JSON.parse(msg.data)
+            setHomeEnergy(value)
+            console.log('webSocket2', value)
         }
     })
 

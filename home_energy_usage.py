@@ -3,6 +3,7 @@ import logging
 import random
 import json
 import time
+from Kafka_producer import Kafka_producer
 
 
 consumption_acumm = 0
@@ -55,6 +56,8 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
 
 
 def main():
+    producer = Kafka_producer(topic_name = "home_energy_consumption", message_key = "home_energy") 
+    producer.kafka_producer_conf(broker_address = "localhost:9092")
 
     HOME_USAGE_POWER = load_home_load()
     while True:
@@ -62,6 +65,8 @@ def main():
         
         logging.debug("Got energy consumption: %s", energy_consumption)
 
+        producer.kafka_produce(message_value = energy_consumption)
+        logging.debug("Produced a message in home_energy_consumption topic")
 
 
         time.sleep(1)

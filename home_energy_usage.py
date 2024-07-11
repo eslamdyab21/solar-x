@@ -49,7 +49,7 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
     consumption_acumm = round(consumption_acumm,2)
 
 
-    energy_consumption = {'time_stamp':time_stamp, 'current_total_consumption':current_total_consumption, 'consumption_acumm':consumption_acumm}
+    energy_consumption = {'time_stamp':time_stamp, 'current_consumption_w':current_total_consumption, 'consumption_accumulated_w':consumption_acumm}
 
     return energy_consumption
 

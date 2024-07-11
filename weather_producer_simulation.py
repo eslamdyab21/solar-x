@@ -5,7 +5,7 @@ import time
 import random
 from Kafka_producer import Kafka_producer
 
-msg = {'current':{'is_day':1, 'cloud_cover':random.randint(650,1000)/1000,
+msg = {'current':{'is_day':1, 'cloud_cover':random.randint(100,1000)/1000,
                   'wind_speed_10m':20, 'temperature_2m':35, 'time_stamp':0}, 
        'daily':{'sunrise':['2024-07-09T05:58:58'], 'sunset':['2024-07-09T20:58:58']}}
 

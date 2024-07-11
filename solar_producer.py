@@ -96,9 +96,9 @@ def get_solar_energy(msg):
     
 
     new_msg = {
-        "solar_power_w" : round(solar_power_w, 2),
-        "solar_power_w_accum" : round(solar_power_w_accumulated, 2),
-        "solar_power_w_accum_hourly" : solar_power_w_accumulated_hourly_set
+        "current_consumption_w" : round(solar_power_w, 2),
+        "consumption_accumulated_w" : round(solar_power_w_accumulated, 2),
+        "current_consumption_w_accumulated_hourly" : solar_power_w_accumulated_hourly_set
     }
 
     return new_msg

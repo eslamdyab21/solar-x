@@ -1,3 +1,8 @@
 .venv
 state
 __pycache__
+frontend-gui/node_modules/
+frontend-gui/package-lock.json
+kafka-websocket/node_modules/
+kafka-websocket/package-lock.json
+test.py

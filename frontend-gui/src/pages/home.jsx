@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import TotalEnergyGenerated from '../components/totalEnergyGenerated/totalEergyGenerated';
+import TotalEnergyGenerated from '../components/totalEnergyGenerated/totalEergyX';
 import PowerFlow from '../components/powerFlow/powerFlow';
 import './home.css'
 
@@ -44,7 +44,7 @@ const Home = () => {
             </div>
 
             <div className="box box_1row_1col">
-                <TotalEnergyGenerated webSocket={webSocket} solarEnergyData={solarEnergy}/>
+                <TotalEnergyGenerated webSocket={webSocket} EnergyData={solarEnergy} title={'Total Energy Generated'} dataKey={"Wh"} color={"gold"} />
             </div>
 
             <div className="box box_1row_1col">

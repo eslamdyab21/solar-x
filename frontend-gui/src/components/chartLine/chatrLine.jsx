@@ -5,19 +5,19 @@ import './chartLine.css'
 
 const ChartLine = (props) => {
     
-    let solar_power_w_accum_hourly_chart = []
-    let keys = Object.keys(props.solar_power_w_accum_hourly).sort();
+    let current_consumption_w_accumulated_hourly_chart = []
+    let keys = Object.keys(props.current_consumption_w_accumulated_hourly).sort();
     keys.forEach((key) => {
-        solar_power_w_accum_hourly_chart.push({"time":key, "Wh":props.solar_power_w_accum_hourly[key]})
+        current_consumption_w_accumulated_hourly_chart.push({"time":key, "Wh":props.current_consumption_w_accumulated_hourly[key]})
     });
 
-    // console.log(solar_power_w_accum_hourly_chart)
+    // console.log(current_consumption_w_accumulated_hourly_chart)
     
     return(
         <div className="chartInfo">
             <div className="chart">
                 <ResponsiveContainer width="99%" height="100%">
-                    <LineChart data={solar_power_w_accum_hourly_chart}>
+                    <LineChart data={current_consumption_w_accumulated_hourly_chart}>
                     <Tooltip
                         contentStyle={{ background: "transparent", border: "none" }}
                         labelStyle={{color:'gold' }}
@@ -37,7 +37,7 @@ const ChartLine = (props) => {
             
             <div className="texts">
                 <span className="percentage" style={{ color: "limegreen" }}>
-                    {props.solar_power_w} w
+                    {props.current_consumption_w} w
                 </span>
                 <span className="duration">Currently</span>
             </div>

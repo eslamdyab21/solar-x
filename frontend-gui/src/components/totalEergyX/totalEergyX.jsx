@@ -10,7 +10,7 @@ const TotalEnergyX = (props) => {
         <div className="topBox">
             <div className="boxInfo">
                 <div className="title">
-                    <img src={'/conversionIcon.svg'} alt="" />
+                    <img src={props.icon} alt="" />
                     <span>{props.title}</span>
                 </div>
 
@@ -20,7 +20,7 @@ const TotalEnergyX = (props) => {
                         <h1>Waiting....</h1>
                     }
                     {
-                        props.color === "gold" ? <p  style={{ color: "gold" }}>Wh</p> : <p  style={{ color: "green" }}>Wh</p>
+                        props.color === "gold" ? <p  style={{ color: "gold" }}>Wh</p> : <p  style={{ color: "#82ca9d" }}>Wh</p>
                     }
                     
                 </div>

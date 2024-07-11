@@ -8,6 +8,11 @@ from Kafka_producer import Kafka_producer
 
 consumption_acumm = 0
 current_consumption = 0
+power_w_accumulated_hourly = 0
+prev_hour = 0
+power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
+    "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+    "21":0,"22":0,"23":0,"24":0}
 
 
 def load_home_load():
@@ -22,6 +27,19 @@ def get_time_in_seconds(t):
     minutes = int(t.split(':')[1])*60
 
     return hours + minutes 
+
+
+def get_power_w_accumulated_hourly(current_hour, current_total_consumption):
+    global prev_hour, power_w_accumulated_hourly
+
+    if current_hour == prev_hour:
+        power_w_accumulated_hourly += current_total_consumption
+    else:
+        power_w_accumulated_hourly = 0
+
+    power_w_accumulated_hourly_set[current_hour] = round(power_w_accumulated_hourly,2)
+
+    prev_hour = current_hour
 
 
 def home_energy_usage_per_second(HOME_USAGE_POWER):
@@ -48,8 +66,11 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
     current_total_consumption = round(current_total_consumption,2)
     consumption_acumm = round(consumption_acumm,2)
 
+    current_hour = time_stamp.split()[1].split(':')[0]
+    get_power_w_accumulated_hourly(current_hour, current_total_consumption)
 
-    energy_consumption = {'time_stamp':time_stamp, 'current_consumption_w':current_total_consumption, 'consumption_accumulated_w':consumption_acumm}
+    energy_consumption = {'time_stamp':time_stamp, 'current_consumption_w':current_total_consumption, 
+                          'consumption_accumulated_w':consumption_acumm, 'current_consumption_w_accumulated_hourly':power_w_accumulated_hourly_set}
 
     return energy_consumption
 

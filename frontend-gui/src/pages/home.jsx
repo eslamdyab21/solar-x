@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import TotalEnergyX from '../components/totalEergyX/totalEergyX';
 import PowerFlow from '../components/powerFlow/powerFlow';
+import AreaLineChart from '../components/areaLineChart/areaLineChart';
 import './home.css'
 
 const WS_URL = "ws://localhost:8080"
@@ -44,15 +45,15 @@ const Home = () => {
             </div>
 
             <div className="box box_1row_1col">
-                <TotalEnergyX webSocket={webSocket} EnergyData={solarEnergy} title={'Energy Production'} dataKey={"Wh"} color={"gold"} icon={'/conversionIcon.svg'}/>
+                <TotalEnergyX EnergyData={solarEnergy} title={'Solar Energy Production'} dataKey={"Wh"} color={"gold"} icon={'/conversionIcon.svg'}/>
             </div>
 
             <div className="box box_1row_1col">
-                <TotalEnergyX webSocket={webSocket2} EnergyData={homeEnergy} title={'Energy Consumption'} dataKey={"Wh"} color={"#82ca9d"} icon={'/revenueIcon.svg'} />
+                <TotalEnergyX EnergyData={homeEnergy} title={'Home Energy Consumption'} dataKey={"Wh"} color={"#82ca9d"} icon={'/revenueIcon.svg'} />
             </div>
 
             <div className="box box_2row_2col">
-                Solar Energy Flow
+                <AreaLineChart solarEnergyData={solarEnergy} homeEnergyData={homeEnergy}/>
             </div>
 
             <div className="box box_1row_1col">

@@ -60,3 +60,9 @@
     background-color: beige;
     opacity: 0.85;
 }
+
+.box_1row_1col_flow_hide_order{
+    grid-column: span 1;
+    grid-row: span 1;
+    border: 0px
+}

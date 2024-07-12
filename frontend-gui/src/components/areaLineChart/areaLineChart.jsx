@@ -17,7 +17,7 @@ function reformulate(data) {
         else {
             new_key = String(Number(key) - 12) + " PM"
         }
-        new_data.push({"Time":new_key, "Kwh":Math.round(data[key]/1000)})
+        new_data.push({"Time":new_key, "Kwh":(data[key]/1000).toFixed(2)})
     });
     
 

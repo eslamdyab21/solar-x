@@ -1,6 +1,7 @@
 import LinearIndeterminate from '../linearProgress/linearProgress';
 import SolarPowerOutlinedIcon from '@mui/icons-material/SolarPowerOutlined';
 import BroadcastOnHomeOutlinedIcon from '@mui/icons-material/BroadcastOnHomeOutlined';
+import CellTowerIcon from '@mui/icons-material/CellTower';
 import { useState } from 'react'
 import './powerFlow.css'
 
@@ -63,23 +64,23 @@ const PowerFlow = (props) => {
             {!currentConsumptionZeroFlag? 
             <div className='box_flow box_1row_1col_flow'> 
                 <div className='grid_power_icon_white'>
-                    <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
+                    <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
                 </div>
             </div> :
             <div className='box_flow box_1row_1col_flow_grid_power_icon'> 
                 <div className='grid_power_icon_black'>
-                    <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
+                    <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
                 </div>
             </div>
             }
 
 
 
+            <div className='box_flow box_1row_1col_flow_hide_order'></div>
             <div className='box_flow box_1row_1col_flow'></div>
             <div className='box_flow box_1row_1col_flow'></div>
             <div className='box_flow box_1row_1col_flow'></div>
-            <div className='box_flow box_1row_1col_flow'></div>
-            <div className='box_flow box_1row_1col_flow'></div>
+            <div className='box_flow box_1row_1col_flow_hide_order'></div>
         </div>
     )
 }

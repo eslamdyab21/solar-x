@@ -45,7 +45,7 @@ const AreaLineChart = (props) => {
 
     return (
         <div className="bigChartBox">
-          <h1 className="h1Center">Solar Energy Flow</h1>
+          <h1 className="h1Center">Energy Flow</h1>
           {/* <h4>solar power consumption</h4> */}
           <div className="areaChart">
             <ResponsiveContainer width="99%" height="100%">
@@ -81,7 +81,7 @@ const AreaLineChart = (props) => {
                   // stackId="2"
                   stroke="#82ca9d"
                   fill="#82ca9d"
-                  unit='Kwh'
+                  unit=' Kwh'
                 />
     
               </AreaChart>

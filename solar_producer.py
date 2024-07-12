@@ -11,7 +11,7 @@ solar_power_w_accumulated_hourly = 0
 prev_hour = 0
 solar_power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
     "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
-    "21":0,"22":0,"23":0,"24":0}
+    "21":0,"22":0,"23":0}
 
 def get_time_in_seconds(t):
     hours = int(t.split(':')[0])*3600
@@ -107,7 +107,7 @@ def get_solar_energy(msg):
 def main():
     consumer = Kafka_consumer(topic_name = ["weather_data"])
     consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
-                                 consumer_group = "weather_reader4solar",
+                                 consumer_group = "weather_reader4solarX",
                                  auto_offset_reset = "latest")
 
 

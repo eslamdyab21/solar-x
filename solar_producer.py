@@ -22,12 +22,12 @@ def get_time_in_seconds(t):
 
 
 def get_power_w_accumulated(sun_rise, sun_set, time_stamp, solar_panel_rating_w_sec, is_day, cloud_cover_percentage):
-    global solar_power_w_accumulated, solar_power_w
+    global solar_power_w_accumulated, solar_power_w, solar_power_w_accumulated_hourly_set
 
     sun_rise_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_rise)).split()[1])
     sun_set_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_set)).split()[1])
     low_peak_threshold = get_time_in_seconds('09:60:60')
-    high_peak_threshold = get_time_in_seconds('2:60:60')
+    high_peak_threshold = get_time_in_seconds('14:60:60')
     # current_t 0 to 246060
     # sun_rise_t:10 --> 0:100%, 10:1500 --> 100% , 15:sun_set_t --> 100%:0
     current_t =  get_time_in_seconds(time_stamp.split()[1])
@@ -55,8 +55,11 @@ def get_power_w_accumulated(sun_rise, sun_set, time_stamp, solar_panel_rating_w_
 
     cuurent_hour = time_stamp.split()[1].split(':')[0]
 
-    if cuurent_hour == "24":
+    if int(cuurent_hour) == 1:
         solar_power_w_accumulated = 0
+        solar_power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
+                                                "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+                                                "21":0,"22":0,"23":0}
     
 
 
@@ -96,6 +99,7 @@ def get_solar_energy(msg):
     
 
     new_msg = {
+        "time_stamp":time_stamp,
         "current_consumption_w" : round(solar_power_w, 2),
         "consumption_accumulated_w" : round(solar_power_w_accumulated, 2),
         "current_consumption_w_accumulated_hourly" : solar_power_w_accumulated_hourly_set

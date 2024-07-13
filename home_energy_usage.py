@@ -43,11 +43,13 @@ def get_power_w_accumulated_hourly(current_hour, current_total_consumption):
 
 
 def home_energy_usage_per_second(HOME_USAGE_POWER):
-    global consumption_acumm, current_consumption
+    global consumption_acumm, current_consumption, power_w_accumulated_hourly_set
     current_total_consumption = 0
 
     time_stamp = str(datetime.datetime.now().replace(microsecond=0))
     current_time = get_time_in_seconds(time_stamp.split()[1])
+    current_hour = time_stamp.split()[1].split(':')[0]
+
     
 
     for appliance in HOME_USAGE_POWER.keys():
@@ -60,13 +62,19 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
                 consumption_high = HOME_USAGE_POWER[appliance]['consumption'][1] / 3600
                 current_consumption = (random.randint(800,1000)/1000) * (consumption_low + consumption_high) / 2
                 current_total_consumption += current_consumption
-                consumption_acumm += current_consumption
                 break
 
+
     current_total_consumption = round(current_total_consumption,2)
+    consumption_acumm += current_total_consumption
     consumption_acumm = round(consumption_acumm,2)
 
-    current_hour = time_stamp.split()[1].split(':')[0]
+    if int(current_hour) == 1:
+        consumption_acumm = 0
+        power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
+                                            "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+                                            "21":0,"22":0,"23":0}
+
     get_power_w_accumulated_hourly(current_hour, current_total_consumption)
 
     energy_consumption = {'time_stamp':time_stamp, 'current_consumption_w':current_total_consumption, 

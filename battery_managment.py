@@ -25,9 +25,6 @@ def load_batteries_info():
                                              "is_charging":0}
             i +=1
 
-    batteries_status['battery_3']['current_energy_wh'] = 10000
-    print(batteries_status)
-
 
 def charge_batteries(access_power_w, last_battery_charged = None):
     global batteries_status
@@ -46,7 +43,7 @@ def charge_batteries(access_power_w, last_battery_charged = None):
             min_energy = batteries_status[battery]['current_energy_wh']
             min_energy_battery = battery
 
-    if full_charged_counter == len(batteries_status.keys()):
+    if min_energy_battery == last_battery_charged or full_charged_counter == len(batteries_status.keys()):
         return
 
     if access_power_w > batteries_status[min_energy_battery]['max_charge_speed_w']:
@@ -87,7 +84,6 @@ def bms(key, value):
         access_power_w = value['current_consumption_w'] - prev_home_consumption['current_consumption_w']
         if access_power_w > 0:
             charge_batteries(round(access_power_w,2))
-            print(batteries_status)
         else:
             consume_batteries(-1*access_power_w)
 
@@ -118,6 +114,11 @@ def main():
             offset = msg.offset()
 
             bms(key, dict(value))
+            msg = batteries_status.copy()
+            msg['time_stamp'] = value['time_stamp']
+
+            producer.kafka_produce(message_value = msg)
+            logging.debug(f"{msg}")
 
             # logging.debug(f"{offset} {key} {value}")
             logging.debug("-------------------------------------------------")

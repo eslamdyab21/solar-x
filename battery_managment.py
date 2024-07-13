@@ -48,6 +48,7 @@ def charge_batteries(access_power_w, last_battery_charged = None):
 
         access_power_w = batteries_status[min_energy_battery]['max_charge_speed_w']
         batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w
+        batteries_status[min_energy_battery]['current_energy_wh'] = round( batteries_status[min_energy_battery]['current_energy_wh'] , 2)
         batteries_status[min_energy_battery]['is_charging'] = 1
 
         if batteries_status[min_energy_battery]['current_energy_wh'] > batteries_status[battery]['capacity_kwh']*1000:
@@ -58,6 +59,7 @@ def charge_batteries(access_power_w, last_battery_charged = None):
 
     else:
         batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w
+        batteries_status[min_energy_battery]['current_energy_wh'] = round(batteries_status[min_energy_battery]['current_energy_wh'] , 2)
         batteries_status[min_energy_battery]['is_charging'] = 1
 
         if batteries_status[min_energy_battery]['current_energy_wh'] > batteries_status[battery]['capacity_kwh']*1000:

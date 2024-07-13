@@ -1,6 +1,9 @@
 import json
 import logging
+import random
 from Kafka_consumer import Kafka_consumer
+from Kafka_producer import Kafka_producer
+
 
 prev_home_consumption = None
 batteries_status = {}
@@ -22,7 +25,8 @@ def load_batteries_info():
                                              "is_charging":0}
             i +=1
 
-
+    batteries_status['battery_3']['current_energy_wh'] = 10000
+    print(batteries_status)
 
 
 def charge_batteries(access_power_w, last_battery_charged = None):
@@ -31,6 +35,8 @@ def charge_batteries(access_power_w, last_battery_charged = None):
     min_energy_battery = 'battery_1'
     min_energy = batteries_status[min_energy_battery]['current_energy_wh']
     full_charged_counter = 0
+    loss = 1 - random.randint(850,1000)/1000
+
 
     for battery in batteries_status.keys():
         if int(batteries_status[battery]['current_energy_wh']) == batteries_status[battery]['capacity_kwh']*1000:
@@ -40,30 +46,30 @@ def charge_batteries(access_power_w, last_battery_charged = None):
             min_energy = batteries_status[battery]['current_energy_wh']
             min_energy_battery = battery
 
-    if min_energy_battery == last_battery_charged or full_charged_counter == len(batteries_status.keys()):
+    if full_charged_counter == len(batteries_status.keys()):
         return
 
     if access_power_w > batteries_status[min_energy_battery]['max_charge_speed_w']:
         access = access_power_w - batteries_status[min_energy_battery]['max_charge_speed_w']
 
         access_power_w = batteries_status[min_energy_battery]['max_charge_speed_w']
-        batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w
+        batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w - loss*access_power_w
         batteries_status[min_energy_battery]['current_energy_wh'] = round( batteries_status[min_energy_battery]['current_energy_wh'] , 2)
         batteries_status[min_energy_battery]['is_charging'] = 1
 
-        if batteries_status[min_energy_battery]['current_energy_wh'] > batteries_status[battery]['capacity_kwh']*1000:
-            batteries_status[battery]['current_energy_wh'] = batteries_status[battery]['capacity_kwh']*1000
+        if batteries_status[min_energy_battery]['current_energy_wh'] > batteries_status[min_energy_battery]['capacity_kwh']*1000:
+            batteries_status[min_energy_battery]['current_energy_wh'] = batteries_status[min_energy_battery]['capacity_kwh']*1000
             batteries_status[min_energy_battery]['is_charging'] = 0
-        else:    
-            charge_batteries(access_power_w = round(access,2), last_battery_charged = min_energy_battery)
+        
+        charge_batteries(access_power_w = round(access,2), last_battery_charged = min_energy_battery)
 
     else:
-        batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w
+        batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w - loss*access_power_w
         batteries_status[min_energy_battery]['current_energy_wh'] = round(batteries_status[min_energy_battery]['current_energy_wh'] , 2)
         batteries_status[min_energy_battery]['is_charging'] = 1
 
-        if batteries_status[min_energy_battery]['current_energy_wh'] > batteries_status[battery]['capacity_kwh']*1000:
-            batteries_status[battery]['current_energy_wh'] = batteries_status[battery]['capacity_kwh']*1000
+        if batteries_status[min_energy_battery]['current_energy_wh'] > batteries_status[min_energy_battery]['capacity_kwh']*1000:
+            batteries_status[min_energy_battery]['current_energy_wh'] = batteries_status[min_energy_battery]['capacity_kwh']*1000
             batteries_status[min_energy_battery]['is_charging'] = 0
 
 
@@ -93,7 +99,10 @@ def main():
     consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
                                  consumer_group = "battery_proccessing",
                                  auto_offset_reset = "latest")
-    
+
+    producer = Kafka_producer(topic_name = "battery_data", message_key = "bms")
+    producer.kafka_producer_conf(broker_address = "localhost:9092")
+
     load_batteries_info()
 
     while True:
@@ -109,6 +118,7 @@ def main():
             offset = msg.offset()
 
             bms(key, dict(value))
+
             # logging.debug(f"{offset} {key} {value}")
             logging.debug("-------------------------------------------------")
 

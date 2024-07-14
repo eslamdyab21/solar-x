@@ -6,13 +6,16 @@ import './home.css'
 
 const WS_URL = "ws://localhost:8080"
 const WS2_URL = "ws://localhost:9090"
+const WS3_URL = "ws://localhost:9191"
 const webSocket =  new WebSocket(WS_URL)
 const webSocket2 =  new WebSocket(WS2_URL)
+const webSocket3 =  new WebSocket(WS3_URL)
 
 
 const Home = () => {
     const [solarEnergy, setSolarEnergy] = useState(null)
     const [homeEnergy, setHomeEnergy] = useState(null)
+    const [batteryEnergy, setBatteryEnergy] = useState(null)
 
     useEffect( () => {
 
@@ -26,6 +29,12 @@ const Home = () => {
             const value = JSON.parse(msg.data)
             setHomeEnergy(value)
             console.log('webSocket2', value)
+        }
+
+        webSocket3.onmessage = (msg) => {
+            const value = JSON.parse(msg.data)
+            setBatteryEnergy(value)
+            console.log('webSocket3', value)
         }
     })
 

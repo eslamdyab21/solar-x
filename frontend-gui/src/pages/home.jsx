@@ -46,7 +46,7 @@ const Home = () => {
             </div>
             
             <div className="box box_1row_2col">
-                <PowerFlow webSocket={webSocket} solarEnergyData={solarEnergy}/>
+                <PowerFlow solarEnergyData={solarEnergy} batteryEnergyData={batteryEnergy} icon={'/batteryIcon.svg'}/>
             </div>
 
             <div className="box box_3row_1col">

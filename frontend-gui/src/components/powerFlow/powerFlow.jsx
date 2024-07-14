@@ -2,6 +2,7 @@ import LinearIndeterminate from '../linearProgress/linearProgress';
 import SolarPowerOutlinedIcon from '@mui/icons-material/SolarPowerOutlined';
 import BroadcastOnHomeOutlinedIcon from '@mui/icons-material/BroadcastOnHomeOutlined';
 import CellTowerIcon from '@mui/icons-material/CellTower';
+import Battery from '../battery/battery'
 import { useState } from 'react'
 import './powerFlow.css'
 
@@ -11,10 +12,10 @@ const PowerFlow = (props) => {
 
     if (props.solarEnergyData){
         if (props.solarEnergyData.current_consumption_w == 0){
-            !currentConsumptionZeroFlag? setCurrentConsumptionZeroFlag(true) : pass = null
+            !currentConsumptionZeroFlag? setCurrentConsumptionZeroFlag(true) : pass = true
         }
         else{
-            currentConsumptionZeroFlag? setCurrentConsumptionZeroFlag(false) : pass = null
+            currentConsumptionZeroFlag? setCurrentConsumptionZeroFlag(false) : pass = true
         }
     }
     
@@ -77,9 +78,29 @@ const PowerFlow = (props) => {
 
 
             <div className='box_flow box_1row_1col_flow_hide_order'></div>
-            <div className='box_flow box_1row_1col_flow'></div>
-            <div className='box_flow box_1row_1col_flow'></div>
-            <div className='box_flow box_1row_1col_flow'></div>
+            <div className='box_flow box_1row_1col_flow'>
+            { props.batteryEnergyData?
+                <Battery batteryEnergyData={props.batteryEnergyData.battery_1} icon={props.icon}/>
+                :
+                <h2>Waiting.....</h2>
+            }
+            </div>
+            <div className='box_flow box_1row_1col_flow'>
+                { props.batteryEnergyData?
+                <Battery batteryEnergyData={props.batteryEnergyData.battery_2} icon={props.icon}/>
+                :
+                <h2>Waiting.....</h2>
+            }
+            </div>
+
+            <div className='box_flow box_1row_1col_flow'>
+                { props.batteryEnergyData?
+                <Battery batteryEnergyData={props.batteryEnergyData.battery_3} icon={props.icon}/>
+                :
+                <h2>Waiting.....</h2>
+            }
+            </div>
+
             <div className='box_flow box_1row_1col_flow_hide_order'></div>
         </div>
     )

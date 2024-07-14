@@ -1,0 +1,23 @@
+.boxInfo {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.title-info {
+    text-align: left;
+    margin-top: 5px;
+}
+
+.icon{
+    margin-left: -5px;
+    margin-top: -5px;
+}

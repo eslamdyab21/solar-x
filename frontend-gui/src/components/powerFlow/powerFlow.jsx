@@ -20,89 +20,90 @@ const PowerFlow = (props) => {
     }
     
     return(
-        <div className="powerFlow">
-            {!currentConsumptionZeroFlag? 
-            <div className='box_flow box_1row_1col_flow_solar_icon'> 
-                <div className='solar_icon'>
-                    <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
+        <div>
+            <div className="powerFlow">
+                {!currentConsumptionZeroFlag? 
+                <div className='box_flow box_1row_1col_flow_solar_icon'> 
+                    <div className='solar_icon'>
+                        <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
+                    </div>
+                </div> :
+                <div className='box_flow box_1row_1col_flow'> 
+                    <div className='solar_icon'>
+                        <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
+                    </div>
                 </div>
-            </div> :
-            <div className='box_flow box_1row_1col_flow'> 
-                <div className='solar_icon'>
-                    <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
+                }
+
+
+                <div className='box_1row_1col_flow_pad'>
+                    {props.solarEnergyData ? 
+                    <LinearIndeterminate animate={props.solarEnergyData.current_consumption_w === 0? false : true}/>
+                    : 
+                    <LinearIndeterminate animate={false}/>} 
                 </div>
-            </div>
-            }
-
-
-            <div className='box_1row_1col_flow_pad'>
-                {props.solarEnergyData ? 
-                <LinearIndeterminate animate={props.solarEnergyData.current_consumption_w === 0? false : true}/>
-                : 
-                <LinearIndeterminate animate={false}/>} 
-            </div>
 
 
 
-            <div className='box_flow box_1row_1col_flow'>
-                <div className='home_icon'>
-                    <BroadcastOnHomeOutlinedIcon fontSize='large' sx={{ fontSize: 50 }}/>
+                <div className='box_flow box_1row_1col_flow'>
+                    <div className='home_icon'>
+                        <BroadcastOnHomeOutlinedIcon fontSize='large' sx={{ fontSize: 50 }}/>
+                    </div>
                 </div>
-            </div>
 
 
 
 
-            <div className='box_1row_1col_flow_pad'>
-                {props.solarEnergyData ? 
-                <LinearIndeterminate animate={props.solarEnergyData.current_consumption_w != 0? false : true}/>
-                : 
-                <LinearIndeterminate animate={false}/>} 
-            </div>
-
-
-
-            {!currentConsumptionZeroFlag? 
-            <div className='box_flow box_1row_1col_flow'> 
-                <div className='grid_power_icon_white'>
-                    <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
+                <div className='box_1row_1col_flow_pad'>
+                    {props.solarEnergyData ? 
+                    <LinearIndeterminate animate={props.solarEnergyData.current_consumption_w != 0? false : true}/>
+                    : 
+                    <LinearIndeterminate animate={false}/>} 
                 </div>
-            </div> :
-            <div className='box_flow box_1row_1col_flow_grid_power_icon'> 
-                <div className='grid_power_icon_black'>
-                    <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
+
+
+
+                {!currentConsumptionZeroFlag? 
+                <div className='box_flow box_1row_1col_flow'> 
+                    <div className='grid_power_icon_white'>
+                        <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
+                    </div>
+                </div> :
+                <div className='box_flow box_1row_1col_flow_grid_power_icon'> 
+                    <div className='grid_power_icon_black'>
+                        <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
+                    </div>
                 </div>
+                }
             </div>
-            }
 
-
-
-            <div className='box_flow box_1row_1col_flow_hide_order'></div>
-            <div className='box_flow box_1row_1col_flow'>
-            { props.batteryEnergyData?
-                <Battery batteryEnergyData={props.batteryEnergyData.battery_1} icon={props.icon}/>
-                :
-                <h5>Waiting....</h5>
-            }
-            </div>
-            <div className='box_flow box_1row_1col_flow'>
+            <div className='flex-batteries-container'>
+                <div className='flex-battery'>
                 { props.batteryEnergyData?
-                <Battery batteryEnergyData={props.batteryEnergyData.battery_2} icon={props.icon}/>
-                :
-                <h5>Waiting....</h5>
-            }
-            </div>
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_1} icon={props.icon}/>
+                    :
+                    <h5>Waiting....</h5>
+                }
+                </div>
+                <div className='flex-battery'>
+                    { props.batteryEnergyData?
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_2} icon={props.icon}/>
+                    :
+                    <h5>Waiting....</h5>
+                }
+                </div>
 
-            <div className='box_flow box_1row_1col_flow'>
-                { props.batteryEnergyData?
-                <Battery batteryEnergyData={props.batteryEnergyData.battery_3} icon={props.icon}/>
-                :
-                <h5>Waiting....</h5>
-            }
-            </div>
+                <div className='flex-battery'>
+                    { props.batteryEnergyData?
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_3} icon={props.icon}/>
+                    :
+                    <h5>Waiting....</h5>
+                }
+                </div>
 
-            <div className='box_flow box_1row_1col_flow_hide_order'></div>
+            </div>
         </div>
+        
     )
 }
 

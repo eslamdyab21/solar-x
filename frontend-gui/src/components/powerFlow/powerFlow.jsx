@@ -82,14 +82,14 @@ const PowerFlow = (props) => {
             { props.batteryEnergyData?
                 <Battery batteryEnergyData={props.batteryEnergyData.battery_1} icon={props.icon}/>
                 :
-                <h2>Waiting.....</h2>
+                <h5>Waiting....</h5>
             }
             </div>
             <div className='box_flow box_1row_1col_flow'>
                 { props.batteryEnergyData?
                 <Battery batteryEnergyData={props.batteryEnergyData.battery_2} icon={props.icon}/>
                 :
-                <h2>Waiting.....</h2>
+                <h5>Waiting....</h5>
             }
             </div>
 
@@ -97,7 +97,7 @@ const PowerFlow = (props) => {
                 { props.batteryEnergyData?
                 <Battery batteryEnergyData={props.batteryEnergyData.battery_3} icon={props.icon}/>
                 :
-                <h2>Waiting.....</h2>
+                <h5>Waiting....</h5>
             }
             </div>
 

@@ -80,14 +80,14 @@ const PowerFlow = (props) => {
             <div className='flex-batteries-container'>
                 <div className='flex-battery'>
                 { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_1} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_1} batteryName={'Battery 1'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
                 </div>
                 <div className='flex-battery'>
                     { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_2} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_2} batteryName={'Battery 2'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
@@ -95,7 +95,7 @@ const PowerFlow = (props) => {
 
                 <div className='flex-battery'>
                     { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_3} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_3} batteryName={'Battery 3'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }

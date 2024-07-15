@@ -6,7 +6,7 @@ const Battery = (props) => {
 	    <div className="boxInfo">
 	        <div className='title'> 
 	            <img className='icon' src={props.icon} alt="" />
-	            <span>Battery 1</span>
+	            <span>{props.batteryName}</span>
 	        </div>
 
 	        <div className='title-info'>

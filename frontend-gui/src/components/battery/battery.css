@@ -12,12 +12,21 @@
     margin-bottom: 10px;
 }
 
+
 .title-info {
-    text-align: left;
-    margin-top: 5px;
+    float: left; 
+    width: 50%; 
 }
+
+.battery_precentage{
+    width: 50%; 
+    margin-left: 70%; 
+}
+
+
 
 .icon{
     margin-left: -5px;
     margin-top: -5px;
 }
+

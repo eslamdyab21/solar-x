@@ -22,12 +22,13 @@ class BMS():
                                                  "max_charge_speed_w": HOME_CONFIGURATIONS['batteries_charge_max_speed_w_second'][i-1],
                                                  "current_energy_wh":battery_capacity*1000,
                                                  "is_charging":0,
+                                                 "status":'ideal',
                                                  "max_output_w": round(battery_capacity*1000/3600, 2)}
                 i +=1
 
-        self.batteries_status['battery_3']['current_energy_wh'] = 6000
-        self.batteries_status['battery_2']['current_energy_wh'] = 10000
-        self.batteries_status['battery_1']['current_energy_wh'] = 11000
+        self.batteries_status['battery_3']['current_energy_wh'] = 11980
+        self.batteries_status['battery_2']['current_energy_wh'] = 11990
+        self.batteries_status['battery_1']['current_energy_wh'] = 11980
 
 
 
@@ -41,11 +42,15 @@ class BMS():
 
         for battery in self.batteries_status.keys():
             if int(self.batteries_status[battery]['current_energy_wh']) == self.batteries_status[battery]['capacity_kwh']*1000:
+                self.batteries_status[battery]['status'] = 'ideal'
                 full_charged_counter += 1
 
             if self.batteries_status[battery]['current_energy_wh'] < min_energy and battery != last_battery_charged:
                 min_energy = self.batteries_status[battery]['current_energy_wh']
                 min_energy_battery = battery
+
+        if full_charged_counter == len(self.batteries_status.keys()):
+            self.batteries_status[min_energy_battery]['status'] = 'ideal'
 
         if min_energy_battery == last_battery_charged or full_charged_counter == len(self.batteries_status.keys()):
             return access_power_w
@@ -74,15 +79,29 @@ class BMS():
                 self.batteries_status[min_energy_battery]['is_charging'] = 0
 
 
+        self.batteries_status[min_energy_battery]['status'] = 'charging'
+
+
     def consume_batteries(self, access_power_w):
         max_energy_battery = 'battery_1'
         max_energy = self.batteries_status[max_energy_battery]['current_energy_wh']
+        full_discharged_counter = 0
 
-        # get max battery energy
+
         for battery in self.batteries_status.keys():
+            if int(self.batteries_status[battery]['current_energy_wh']):
+                self.batteries_status[battery]['status'] = 'ideal'
+                full_discharged_counter +=1
+
             if self.batteries_status[battery]['current_energy_wh'] > max_energy:
                 max_energy = self.batteries_status[battery]['current_energy_wh']
                 max_energy_battery = battery
+
+
+        if full_discharged_counter == len(self.batteries_status.keys()):
+            self.batteries_status[max_energy_battery]['status'] = 'ideal'
+            return access_power_w
+
 
         if access_power_w > self.batteries_status[max_energy_battery]['max_output_w']:
             self.batteries_status[max_energy_battery]['current_energy_wh'] -= self.batteries_status[max_energy_battery]['max_output_w']
@@ -93,5 +112,5 @@ class BMS():
             self.batteries_status[max_energy_battery]['current_energy_wh'] = round(self.batteries_status[max_energy_battery]['current_energy_wh'] , 2)
 
 
-         
+        self.batteries_status[max_energy_battery]['status'] = 'discharging'
 

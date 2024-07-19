@@ -11,15 +11,23 @@ def access_power_managment(key, value, bms):
 
     if key == 'home_energy':
         prev_home_consumption = value
+
     elif prev_home_consumption != None:
         access_power_w = value['current_consumption_w'] - prev_home_consumption['current_consumption_w']
+
         if access_power_w > 0:
             access_power_from_batteries = bms.charge_batteries(round(access_power_w,2))
+
             if access_power_from_batteries:
-                pass
                 # charge the national grid
+                pass
+
         else:
-            bms.consume_batteries(-1*access_power_w)
+            negative_access_power_from_batteries = bms.consume_batteries(-1*access_power_w)
+
+            if negative_access_power_from_batteries:
+                # consume from the national grid
+                pass
 
 
 def main():
@@ -46,8 +54,9 @@ def main():
             offset = msg.offset()
 
             access_power_managment(key, dict(value), bms)
+
             msg = bms.batteries_status.copy()
-            msg['time_stamp'] = value['time_stamp']
+            msg['battery_1']['time_stamp'] = value['time_stamp']
 
             producer.kafka_produce(message_value = msg)
             logging.debug(f"{msg}")

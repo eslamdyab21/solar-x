@@ -3,12 +3,15 @@ import SolarPowerOutlinedIcon from '@mui/icons-material/SolarPowerOutlined';
 import BroadcastOnHomeOutlinedIcon from '@mui/icons-material/BroadcastOnHomeOutlined';
 import CellTowerIcon from '@mui/icons-material/CellTower';
 import Battery from '../battery/battery'
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import './powerFlow.css'
 
+let is_ideal = true
+let status = ''
 
 const PowerFlow = (props) => {
     const [currentSolarProductionZeroFlag, setCurrentSolarProductionZeroFlagZeroFlag] = useState(false)
+    const [batteryStatus, setBatteryStatus] = useState('')
     let pass = false
 
 
@@ -20,6 +23,23 @@ const PowerFlow = (props) => {
             currentSolarProductionZeroFlag? setCurrentSolarProductionZeroFlagZeroFlag(false) : pass = true
         }
     }
+
+    if (props.batteryEnergyData){
+        let keys = Object.keys(props.batteryEnergyData);
+
+        for (const key of keys) {
+            if (props.batteryEnergyData[key]['status'] !== 'ideal') {
+                is_ideal = false
+                status = props.batteryEnergyData[key]['status']
+                break
+            }
+            status = props.batteryEnergyData[key]['status']
+        }
+
+        batteryStatus !== status ? setBatteryStatus(status) : pass = true
+        
+    }
+    
     
 
     return(
@@ -66,7 +86,7 @@ const PowerFlow = (props) => {
 
 
 
-                {currentSolarProductionZeroFlag? 
+                {currentSolarProductionZeroFlag && batteryStatus === 'ideal'? 
                 <div className='box_flow box_1row_1col_flow_grid_power_icon'> 
                     <div className='grid_power_icon_black'>
                         <CellTowerIcon fontSize='large' sx={{ fontSize: 50 }} />
@@ -81,6 +101,7 @@ const PowerFlow = (props) => {
                 }
             </div>
 
+            {batteryStatus === 'discharging' ?
             <div className='flex-batteries-container-active'>
                 <div className='flex-battery'>
                 { props.batteryEnergyData?
@@ -105,6 +126,32 @@ const PowerFlow = (props) => {
                 }
                 </div>
             </div>
+            :
+            <div className='flex-batteries-container-ideal'>
+                <div className='flex-battery'>
+                { props.batteryEnergyData?
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_1} batteryName={'Battery 1'} icon={props.icon}/>
+                    :
+                    <h5>Waiting....</h5>
+                }
+                </div>
+                <div className='flex-battery'>
+                    { props.batteryEnergyData?
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_2} batteryName={'Battery 2'} icon={props.icon}/>
+                    :
+                    <h5>Waiting....</h5>
+                }
+                </div>
+
+                <div className='flex-battery'>
+                    { props.batteryEnergyData?
+                    <Battery batteryEnergyData={props.batteryEnergyData.battery_3} batteryName={'Battery 3'} icon={props.icon}/>
+                    :
+                    <h5>Waiting....</h5>
+                }
+                </div>
+            </div>
+            }
         </div>
     )
 }

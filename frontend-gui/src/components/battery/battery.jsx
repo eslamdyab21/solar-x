@@ -22,7 +22,7 @@ const Battery = (props) => {
 		        </div>
 
 		        <div className="battery_precentage" style={{ color: "limegreen" }}>
-	                <h4> {battery_precentage.toFixed(1)} % </h4>
+	                <h4> {battery_precentage.toFixed(0)} % </h4>
 	            </div>
             </div>
 

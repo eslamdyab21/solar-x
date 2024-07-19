@@ -45,13 +45,9 @@ const Home = () => {
                 Top Days
             </div>
             
-            {batteryEnergy?
             <div className="box box_1row_2col">
                 <PowerFlow solarEnergyData={solarEnergy} batteryEnergyData={batteryEnergy} homeEnergyData={homeEnergy} icon={'/batteryIcon.svg'}/>
             </div>
-            :
-            <h5>Waiting....</h5>
-            }
 
             <div className="box box_3row_1col">
                 Solar Energy Flow

@@ -62,7 +62,7 @@ class BMS():
                 self.batteries_status[min_energy_battery]['current_energy_wh'] = self.batteries_status[min_energy_battery]['capacity_kwh']*1000
                 self.batteries_status[min_energy_battery]['is_charging'] = 0
             
-            charge_batteries(access_power_w = round(access,2), last_battery_charged = min_energy_battery)
+            self.charge_batteries(access_power_w = round(access,2), last_battery_charged = min_energy_battery)
 
         else:
             self.batteries_status[min_energy_battery]['current_energy_wh'] += access_power_w - loss*access_power_w
@@ -87,7 +87,7 @@ class BMS():
         if access_power_w > self.batteries_status[max_energy_battery]['max_output_w']:
             self.batteries_status[max_energy_battery]['current_energy_wh'] -= self.batteries_status[max_energy_battery]['max_output_w']
             self.batteries_status[max_energy_battery]['current_energy_wh'] = round(self.batteries_status[max_energy_battery]['current_energy_wh'] , 2)
-            consume_batteries(access_power_w - self.batteries_status[max_energy_battery]['max_output_w'])
+            self.consume_batteries(access_power_w - self.batteries_status[max_energy_battery]['max_output_w'])
         else:
             self.batteries_status[max_energy_battery]['current_energy_wh'] -= access_power_w
             self.batteries_status[max_energy_battery]['current_energy_wh'] = round(self.batteries_status[max_energy_battery]['current_energy_wh'] , 2)

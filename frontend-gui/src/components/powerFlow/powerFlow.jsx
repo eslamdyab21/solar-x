@@ -25,15 +25,15 @@ const PowerFlow = (props) => {
     }
 
     if (props.batteryEnergyData){
-        let keys = Object.keys(props.batteryEnergyData);
+        let keys = Object.keys(props.batteryEnergyData['batteries']);
 
         for (const key of keys) {
-            if (props.batteryEnergyData[key]['status'] !== 'ideal') {
+            if (props.batteryEnergyData['batteries'][key]['status'] !== 'ideal') {
                 is_ideal = false
-                status = props.batteryEnergyData[key]['status']
+                status = props.batteryEnergyData['batteries'][key]['status']
                 break
             }
-            status = props.batteryEnergyData[key]['status']
+            status = props.batteryEnergyData['batteries'][key]['status']
         }
 
         batteryStatus !== status ? setBatteryStatus(status) : pass = true
@@ -105,14 +105,14 @@ const PowerFlow = (props) => {
             <div className='flex-batteries-container-active'>
                 <div className='flex-battery'>
                 { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_1} batteryName={'Battery 1'} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.batteries.battery_1} batteryName={'Battery 1'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
                 </div>
                 <div className='flex-battery'>
                     { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_2} batteryName={'Battery 2'} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.batteries.battery_2} batteryName={'Battery 2'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
@@ -120,7 +120,7 @@ const PowerFlow = (props) => {
 
                 <div className='flex-battery'>
                     { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_3} batteryName={'Battery 3'} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.batteries.battery_3} batteryName={'Battery 3'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
@@ -130,14 +130,14 @@ const PowerFlow = (props) => {
             <div className='flex-batteries-container-ideal'>
                 <div className='flex-battery'>
                 { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_1} batteryName={'Battery 1'} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.batteries.battery_1} batteryName={'Battery 1'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
                 </div>
                 <div className='flex-battery'>
                     { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_2} batteryName={'Battery 2'} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.batteries.battery_2} batteryName={'Battery 2'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }
@@ -145,7 +145,7 @@ const PowerFlow = (props) => {
 
                 <div className='flex-battery'>
                     { props.batteryEnergyData?
-                    <Battery batteryEnergyData={props.batteryEnergyData.battery_3} batteryName={'Battery 3'} icon={props.icon}/>
+                    <Battery batteryEnergyData={props.batteryEnergyData.batteries.battery_3} batteryName={'Battery 3'} icon={props.icon}/>
                     :
                     <h5>Waiting....</h5>
                 }

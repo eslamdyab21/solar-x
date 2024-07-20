@@ -56,7 +56,7 @@ def main():
             access_power_managment(key, dict(value), bms)
 
             msg = bms.batteries_status.copy()
-            msg['battery_1']['time_stamp'] = value['time_stamp']
+            msg['time_stamp'] = value['time_stamp']
 
             producer.kafka_produce(message_value = msg)
             logging.debug(f"{msg}")

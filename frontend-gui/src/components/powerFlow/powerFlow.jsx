@@ -47,12 +47,12 @@ const PowerFlow = (props) => {
             <div className="powerFlow">
                 {!currentSolarProductionZeroFlag? 
                 <div className='box_flow box_1row_1col_flow_solar_icon'> 
-                    <div className='solar_icon'>
+                    <div className='solar_icon_black'>
                         <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
                     </div>
                 </div> :
                 <div className='box_flow box_1row_1col_flow'> 
-                    <div className='solar_icon'>
+                    <div className='solar_icon_white'>
                         <SolarPowerOutlinedIcon fontSize='large' sx={{ fontSize: 50 }} />
                     </div>
                 </div>

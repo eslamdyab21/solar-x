@@ -31,9 +31,15 @@
     grid-row: span 1;
 }
 
-.solar_icon {
+.solar_icon_white {
     display: flex;
     justify-content: center;
+}
+
+.solar_icon_black {
+    display: flex;
+    justify-content: center;
+    color:#202020
 }
 
 .home_icon {

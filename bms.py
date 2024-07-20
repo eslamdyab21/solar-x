@@ -26,9 +26,9 @@ class BMS():
                                                  "max_output_w": round(battery_capacity*1000/3600, 2)}
                 i +=1
 
-        self.batteries_status['battery_3']['current_energy_wh'] = 11980
-        self.batteries_status['battery_2']['current_energy_wh'] = 11990
-        self.batteries_status['battery_1']['current_energy_wh'] = 11980
+        self.batteries_status['battery_3']['current_energy_wh'] = 6000
+        self.batteries_status['battery_2']['current_energy_wh'] = 7000
+        self.batteries_status['battery_1']['current_energy_wh'] = 7500
 
 
 
@@ -89,7 +89,7 @@ class BMS():
 
 
         for battery in self.batteries_status.keys():
-            if int(self.batteries_status[battery]['current_energy_wh']):
+            if int(self.batteries_status[battery]['current_energy_wh']) == self.batteries_status[battery]['capacity_kwh']*1000:
                 self.batteries_status[battery]['status'] = 'ideal'
                 full_discharged_counter +=1
 

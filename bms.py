@@ -1,12 +1,18 @@
 import json
 import logging
 import random
-
+import datetime
 
 class BMS():
 
     def __init__(self):
-        self.batteries_status = {'time_stamp':None, 'batteries':{}, 'hourly_discharging': {}}
+        self.batteries_status = {'time_stamp':None, 'batteries':{}, 
+                                 'hourly_discharging': {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,
+                                 "06":0,"07":0,"08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,
+                                 "15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0}}
+
+        self.reset_hourly_discharging_flag = True
+
         self.load_batteries_info()
         
 
@@ -30,6 +36,21 @@ class BMS():
         self.batteries_status['batteries']['battery_2']['current_energy_wh'] = 7000
         self.batteries_status['batteries']['battery_1']['current_energy_wh'] = 7500
 
+
+
+    def reset_hourly_discharging(self):
+        time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+        current_hour = time_stamp.split()[1].split(':')[0]
+
+        if int(current_hour) == 0 and self.reset_hourly_discharging_flag:
+            self.batteries_status['hourly_discharging'] = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,
+                                                            "07":0,"08":0,"09":0,"10":0,"11":0,"12":0,"13":0,
+                                                            "14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+                                                            "21":0,"22":0,"23":0}
+            self.reset_hourly_discharging_flag = False
+
+        elif int(current_hour) != 0:
+            self.reset_hourly_discharging_flag = True
 
 
     def charge_batteries(self, access_power_w, last_battery_charged = None):
@@ -80,13 +101,16 @@ class BMS():
 
 
         self.batteries_status['batteries'][min_energy_battery]['status'] = 'charging'
+        self.reset_hourly_discharging()
 
 
-    def consume_batteries(self, access_power_w):
+    def discharge_batteries(self, access_power_w):
         max_energy_battery = 'battery_1'
         max_energy = self.batteries_status['batteries'][max_energy_battery]['current_energy_wh']
         full_discharged_counter = 0
 
+        time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+        current_hour = time_stamp.split()[1].split(':')[0]
 
         for battery in self.batteries_status['batteries'].keys():
             if int(self.batteries_status['batteries'][battery]['current_energy_wh']) == self.batteries_status['batteries'][battery]['capacity_kwh']*1000:
@@ -106,11 +130,14 @@ class BMS():
         if access_power_w > self.batteries_status['batteries'][max_energy_battery]['max_output_w']:
             self.batteries_status['batteries'][max_energy_battery]['current_energy_wh'] -= self.batteries_status['batteries'][max_energy_battery]['max_output_w']
             self.batteries_status['batteries'][max_energy_battery]['current_energy_wh'] = round(self.batteries_status['batteries'][max_energy_battery]['current_energy_wh'] , 2)
-            self.consume_batteries(access_power_w - self.batteries_status['batteries'][max_energy_battery]['max_output_w'])
+            self.discharge_batteries(access_power_w - self.batteries_status['batteries'][max_energy_battery]['max_output_w'])
+            self.batteries_status['hourly_discharging'][current_hour] += self.batteries_status['batteries'][max_energy_battery]['max_output_w']
+            self.batteries_status['hourly_discharging'][current_hour] = round(self.batteries_status['hourly_discharging'][current_hour],2)
         else:
             self.batteries_status['batteries'][max_energy_battery]['current_energy_wh'] -= access_power_w
             self.batteries_status['batteries'][max_energy_battery]['current_energy_wh'] = round(self.batteries_status['batteries'][max_energy_battery]['current_energy_wh'] , 2)
-
+            self.batteries_status['hourly_discharging'][current_hour] += access_power_w
+            self.batteries_status['hourly_discharging'][current_hour] = round(self.batteries_status['hourly_discharging'][current_hour],2)
 
         self.batteries_status['batteries'][max_energy_battery]['status'] = 'discharging'
-
+        self.reset_hourly_discharging()

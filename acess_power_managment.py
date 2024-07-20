@@ -23,7 +23,7 @@ def access_power_managment(key, value, bms):
                 pass
 
         else:
-            negative_access_power_from_batteries = bms.consume_batteries(-1*access_power_w)
+            negative_access_power_from_batteries = bms.discharge_batteries(-1*access_power_w)
 
             if negative_access_power_from_batteries:
                 # consume from the national grid

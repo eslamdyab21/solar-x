@@ -45,7 +45,7 @@ const AreaLineChart = (props) => {
         }
     }
 
-    if (props.homeEnergyData != null && props.batteryEnergyData != null){
+    if (props.homeEnergyData != null && props.batteryEnergyData != null && props.solarEnergyData == null){
         current_consumption_w_accumulated_hourly_chart = reformulate(props.homeEnergyData.current_consumption_w_accumulated_hourly)
         current_batteries_consumption_w_accumulated_hourly_chart = reformulate(props.batteryEnergyData.hourly_discharging)
 
@@ -78,7 +78,7 @@ const AreaLineChart = (props) => {
                          labelStyle={{ display: "none" }} position={{ y: 0 }}/>
                 <Legend />
     
-          {/*      <Area
+                <Area
                   type="monotone"
                   dataKey="solar_generation"
                   name="Generated"
@@ -86,7 +86,7 @@ const AreaLineChart = (props) => {
                   stroke="#ffc658"
                   fill="#ffc658"
                   unit=' Kwh'
-                />*/}
+                />
     
                 <Area
                   type="monotone"

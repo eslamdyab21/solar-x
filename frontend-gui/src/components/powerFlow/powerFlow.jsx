@@ -3,10 +3,9 @@ import SolarPowerOutlinedIcon from '@mui/icons-material/SolarPowerOutlined';
 import BroadcastOnHomeOutlinedIcon from '@mui/icons-material/BroadcastOnHomeOutlined';
 import CellTowerIcon from '@mui/icons-material/CellTower';
 import Battery from '../battery/battery'
-import { useState , useEffect} from 'react'
+import { useState } from 'react'
 import './powerFlow.css'
 
-let is_ideal = true
 let status = ''
 
 const PowerFlow = (props) => {
@@ -23,7 +22,7 @@ const PowerFlow = (props) => {
             currentSolarProductionZeroFlag? setCurrentSolarProductionZeroFlagZeroFlag(false) : pass = true
         }
     }
-    
+
     else{
         !currentSolarProductionZeroFlag? setCurrentSolarProductionZeroFlagZeroFlag(true) : pass = true
     }
@@ -34,7 +33,6 @@ const PowerFlow = (props) => {
 
         for (const key of keys) {
             if (props.batteryEnergyData['batteries'][key]['status'] !== 'ideal') {
-                is_ideal = false
                 status = props.batteryEnergyData['batteries'][key]['status']
                 break
             }

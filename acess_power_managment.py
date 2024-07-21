@@ -6,13 +6,27 @@ from Kafka_producer import Kafka_producer
 from bms import BMS
 
 prev_home_consumption = None
+prev_key = None
 def access_power_managment(key, value, bms):
-    global prev_home_consumption
+    global prev_home_consumption, prev_key
 
     if key == 'home_energy':
         prev_home_consumption = value
 
+
+    # solar generation is not running
+    if key == 'home_energy' and prev_key == 'home_energy':
+        access_power_w = value['current_consumption_w']
+        negative_access_power_from_batteries = bms.discharge_batteries(access_power_w)
+
+        if negative_access_power_from_batteries:
+            # consume from the national grid
+            pass
+
+
+    # normal operation
     elif prev_home_consumption != None:
+
         access_power_w = value['current_consumption_w'] - prev_home_consumption['current_consumption_w']
 
         if access_power_w > 0:
@@ -29,6 +43,7 @@ def access_power_managment(key, value, bms):
                 # consume from the national grid
                 pass
 
+    prev_key = key
 
 def main():
 

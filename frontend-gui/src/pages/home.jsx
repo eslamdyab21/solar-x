@@ -62,7 +62,7 @@ const Home = () => {
             </div>
 
             <div className="box box_2row_2col">
-                <AreaLineChart solarEnergyData={solarEnergy} homeEnergyData={homeEnergy}/>
+                <AreaLineChart solarEnergyData={solarEnergy} homeEnergyData={homeEnergy} batteryEnergyData={batteryEnergy}/>
             </div>
 
             <div className="box box_1row_1col">

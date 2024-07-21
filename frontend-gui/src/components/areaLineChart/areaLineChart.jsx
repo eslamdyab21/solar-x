@@ -1,4 +1,4 @@
-import {Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend, Label} from "recharts";
+import {Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend} from "recharts";
 import "./areaLineChart.css";
 
 
@@ -29,16 +29,30 @@ function reformulate(data) {
 const AreaLineChart = (props) => {
     let current_generation_w_accumulated_hourly_chart = []
     let current_consumption_w_accumulated_hourly_chart = []
+    let current_batteries_consumption_w_accumulated_hourly_chart = []
     let Energy_kwh_hourly = []
 
-    if (props.solarEnergyData != null && props.homeEnergyData != null){
+    if (props.solarEnergyData != null && props.homeEnergyData != null && props.batteryEnergyData != null){
         current_generation_w_accumulated_hourly_chart = reformulate(props.solarEnergyData.current_consumption_w_accumulated_hourly)
         current_consumption_w_accumulated_hourly_chart = reformulate(props.homeEnergyData.current_consumption_w_accumulated_hourly)
+        current_batteries_consumption_w_accumulated_hourly_chart = reformulate(props.batteryEnergyData.hourly_discharging)
 
         for (let i = 1; i < (current_generation_w_accumulated_hourly_chart.length) ; i++) {
             Energy_kwh_hourly.push({'time':current_generation_w_accumulated_hourly_chart[i].Time, 
                                     'solar_generation':current_generation_w_accumulated_hourly_chart[i].Kwh, 
-                                    'home_consumption':current_consumption_w_accumulated_hourly_chart[i].Kwh})
+                                    'home_consumption':current_consumption_w_accumulated_hourly_chart[i].Kwh,
+                                    'battery_consumption':current_batteries_consumption_w_accumulated_hourly_chart[i].Kwh})
+        }
+    }
+
+    if (props.homeEnergyData != null && props.batteryEnergyData != null){
+        current_consumption_w_accumulated_hourly_chart = reformulate(props.homeEnergyData.current_consumption_w_accumulated_hourly)
+        current_batteries_consumption_w_accumulated_hourly_chart = reformulate(props.batteryEnergyData.hourly_discharging)
+
+        for (let i = 1; i < (current_consumption_w_accumulated_hourly_chart.length) ; i++) {
+            Energy_kwh_hourly.push({'time':current_consumption_w_accumulated_hourly_chart[i].Time, 
+                                    'home_consumption':current_consumption_w_accumulated_hourly_chart[i].Kwh,
+                                    'battery_consumption':current_batteries_consumption_w_accumulated_hourly_chart[i].Kwh})
         }
     }
     
@@ -64,7 +78,7 @@ const AreaLineChart = (props) => {
                          labelStyle={{ display: "none" }} position={{ y: 0 }}/>
                 <Legend />
     
-                <Area
+          {/*      <Area
                   type="monotone"
                   dataKey="solar_generation"
                   name="Generated"
@@ -72,7 +86,7 @@ const AreaLineChart = (props) => {
                   stroke="#ffc658"
                   fill="#ffc658"
                   unit=' Kwh'
-                />
+                />*/}
     
                 <Area
                   type="monotone"
@@ -81,6 +95,16 @@ const AreaLineChart = (props) => {
                   // stackId="2"
                   stroke="#82ca9d"
                   fill="#82ca9d"
+                  unit=' Kwh'
+                />
+
+                 <Area
+                  type="monotone"
+                  dataKey="battery_consumption"
+                  name="Battery"
+                  // stackId="3"
+                  stroke="#49d8ff"
+                  fill="#49d8ff"
                   unit=' Kwh'
                 />
     

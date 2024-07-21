@@ -23,6 +23,11 @@ const PowerFlow = (props) => {
             currentSolarProductionZeroFlag? setCurrentSolarProductionZeroFlagZeroFlag(false) : pass = true
         }
     }
+    
+    else{
+        !currentSolarProductionZeroFlag? setCurrentSolarProductionZeroFlagZeroFlag(true) : pass = true
+    }
+
 
     if (props.batteryEnergyData){
         let keys = Object.keys(props.batteryEnergyData['batteries']);

@@ -79,7 +79,7 @@ class BMS():
         if access_power_w > self.batteries_status['batteries'][min_energy_battery]['max_charge_speed_w']:
             access = access_power_w - self.batteries_status['batteries'][min_energy_battery]['max_charge_speed_w']
 
-            access_power_w = self.batteries_status[min_energy_battery]['max_charge_speed_w']
+            access_power_w = self.batteries_status['batteries'][min_energy_battery]['max_charge_speed_w']
             self.batteries_status['batteries'][min_energy_battery]['current_energy_wh'] += access_power_w - loss*access_power_w
             self.batteries_status['batteries'][min_energy_battery]['current_energy_wh'] = round(self.batteries_status['batteries'][min_energy_battery]['current_energy_wh'] , 2)
             self.batteries_status['batteries'][min_energy_battery]['is_charging'] = 1

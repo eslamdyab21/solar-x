@@ -79,7 +79,7 @@ const PowerFlow = (props) => {
 
                 <div className='box_1row_1col_flow_pad'>
                     {props.solarEnergyData ? 
-                    <LinearIndeterminate animate={currentSolarProductionZeroFlag? true : false}/>
+                    <LinearIndeterminate animate={currentSolarProductionZeroFlag && batteryStatus === 'ideal'? true : false}/>
                     : 
                     <LinearIndeterminate animate={false}/>} 
                 </div>

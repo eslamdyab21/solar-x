@@ -1,5 +1,5 @@
 
-CREATE DATABASE SolarX;
+-- CREATE DATABASE SolarX;
 
 USE SolarX;
 
@@ -14,13 +14,12 @@ CREATE TABLE Batteries(
 );
 
 
-CREATE TABLE Batteries_Reads(
+CREATE TABLE Battery_Readings(
 	id INT AUTO_INCREMENT,
     battery INT,
     current_hourly_consumption_watt FLOAT NOT NULL,
 	current_energy_watt FLOAT NOT NULL,
-    current_precentage INT NOT NULL,
-    status VARCHAR(30),
+    status VARCHAR(11),
     time_stamp TIMESTAMP DEFAULT NOW(),
 
     PRIMARY KEY (id),
@@ -29,6 +28,5 @@ CREATE TABLE Batteries_Reads(
     CHECK(current_hourly_consumption_watt >= 0),
     CHECK(current_energy_watt > 0),
 
-    CHECK (current_precentage BETWEEN 0 AND 100),
     CHECK (status IN ('ideal', 'charging', 'discharging'))
 );

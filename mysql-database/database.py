@@ -45,17 +45,18 @@ class Database():
 
 
 
-    def insert_db(self, query):
-        self.cursor.execute(query)
+    def insert_query(self, query):
 
+        self.cursor.execute(query)
         self.connection.commit()
-        print('Database : insert_db done')
 
         
 
 
 
-    def update_db(self, table, parameters):
+    def update_query(self, query):
 
-        pass
+        self.cursor.execute(query)
+        self.connection.commit()
+
 

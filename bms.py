@@ -62,19 +62,24 @@ class BMS():
 
 
         for battery in self.batteries_status['batteries'].keys():
+
             if int(self.batteries_status['batteries'][battery]['current_energy_wh']) == self.batteries_status['batteries'][battery]['capacity_kwh']*1000:
-                self.batteries_status['batteries'][battery]['status'] = 'ideal'
                 full_charged_counter += 1
 
             if self.batteries_status['batteries'][battery]['current_energy_wh'] < min_energy and battery != last_battery_charged:
                 min_energy = self.batteries_status['batteries'][battery]['current_energy_wh']
                 min_energy_battery = battery
 
+
+            self.batteries_status['batteries'][battery]['status'] = 'ideal'
+
+
         if full_charged_counter == len(self.batteries_status['batteries'].keys()):
             self.batteries_status['batteries'][min_energy_battery]['status'] = 'ideal'
 
         if min_energy_battery == last_battery_charged or full_charged_counter == len(self.batteries_status['batteries'].keys()):
             return access_power_w
+
 
         if access_power_w > self.batteries_status['batteries'][min_energy_battery]['max_charge_speed_w']:
             access = access_power_w - self.batteries_status['batteries'][min_energy_battery]['max_charge_speed_w']

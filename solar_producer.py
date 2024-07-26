@@ -34,18 +34,17 @@ def get_power_w_accumulated(sun_rise, sun_set, time_stamp, solar_panel_rating_w_
     
     if current_t >= sun_rise_t and current_t <= low_peak_threshold:
         t_presentage = (current_t-sun_rise_t)/(low_peak_threshold-sun_rise_t)
-        
 
     elif current_t >= low_peak_threshold and current_t <= high_peak_threshold:
         t_presentage = 1
 
     elif current_t >= high_peak_threshold and current_t <= sun_set_t:
         t_presentage = 1 - (current_t-high_peak_threshold)/(sun_set_t-high_peak_threshold)
-
+        
     else:
         t_presentage = 0
         
-    random_per = random.randint(850,1000)/1000
+    random_per = random.randint(650,1000)/1000
     solar_power_w = solar_panel_rating_w_sec * is_day * t_presentage * (1 - cloud_cover_percentage/100) * random_per
 
     if solar_power_w_accumulated is None:

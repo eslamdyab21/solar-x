@@ -9,14 +9,16 @@ from Kafka_db import Kafka_db
 
 
 def main():
-	consumer = Kafka_consumer(topic_name = ["battery_data", "solar_energy_data"])
+	consumer = Kafka_consumer(topic_name = ["battery_data", "solar_energy_data", "home_energy_consumption"])
 	consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
 		                     consumer_group = "kafka_to_db",
 		                     auto_offset_reset = "latest")
 	
 	db = Database()
 	kafka_db_battery = Kafka_db(db, logging)
-	kafka_db_sola_pannel = Kafka_db(db, logging)
+	kafka_db_solar_pannel = Kafka_db(db, logging)
+	kafka_db_home = Kafka_db(db, logging)
+
 
 	while True:
 		msg = consumer.consume(timeout = 1)
@@ -35,7 +37,9 @@ def main():
 			if key == 'bms':
 				kafka_db_battery.update_battery_db(value)
 			elif key == 'solar_w':
-				kafka_db_sola_pannel.update_solar_pannels_db(value)
+				kafka_db_solar_pannel.update_solar_pannels_db(value, 'Solar_pannel_readings')
+			elif key == 'home_energy':
+				kafka_db_home.update_home_db(value)
 
 			
 

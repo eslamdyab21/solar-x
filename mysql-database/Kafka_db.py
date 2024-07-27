@@ -9,7 +9,7 @@ class Kafka_db():
 
         self.prev_hour = None
         self.current_hour = None
-        
+
         self.prev_minute = None
         self.current_minute = None
 
@@ -63,7 +63,7 @@ class Kafka_db():
 
 
 
-    def update_solar_pannels_db(self, value):
+    def update_solar_pannels_db(self, value, table_name):
 
         time_stamp = str(datetime.datetime.now().replace(microsecond=0))
         self.current_hour = time_stamp.split()[1].split(':')[0]
@@ -98,4 +98,42 @@ class Kafka_db():
 
             self.prev_minute = self.current_minute
             self.logging.info('Database : update_query solar pannels done')
+            self.logging.info("-------------------------------------------------")
+
+
+    def update_home_db(self, value):
+
+        time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+        self.current_hour = time_stamp.split()[1].split(':')[0]
+        self.current_minute = time_stamp.split()[1].split(':')[1]
+
+
+        if self.current_hour != self.prev_hour:
+            query = (
+                f"""
+                INSERT INTO Home_readings VALUES (NULL, 1, {value['consumption_accumulated_w']}, {value['current_consumption_w_accumulated_hourly'][self.current_hour]}, NOW(), NOW());
+                """
+            )
+            self.db.insert_query(query)
+
+            self.prev_hour = self.current_hour
+            self.logging.info('Database : insert_query home done')
+            self.logging.info("-------------------------------------------------")
+
+
+        elif self.current_minute != self.prev_minute:
+            query = (
+                f"""
+                UPDATE Home_readings 
+                SET consumption_watt = {value['consumption_accumulated_w']}, 
+                consumption_hourly_watt = {value['current_consumption_w_accumulated_hourly'][self.current_hour]}, 
+                updated_at = NOW()
+
+                ORDER BY id DESC LIMIT 1
+                """
+            )
+            self.db.update_query(query)
+
+            self.prev_minute = self.current_minute
+            self.logging.info('Database : update_query home done')
             self.logging.info("-------------------------------------------------")

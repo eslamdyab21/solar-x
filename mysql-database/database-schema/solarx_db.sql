@@ -80,9 +80,8 @@ CREATE TABLE Home_devices_consumption(
     PRIMARY KEY (id),
     FOREIGN KEY (home) REFERENCES Home(id),
 
-    CHECK(consumption_min_wh >= 0)
+    CHECK(consumption_min_wh >= 0),
     CHECK(consumption_max_wh >= 0)
-
 );
 
 

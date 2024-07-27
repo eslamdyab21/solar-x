@@ -39,7 +39,7 @@ CREATE TABLE Solar_pannels(
     capacity_kwh FLOAT NOT NULL,
 
     PRIMARY KEY (id),
-    CHECK(capacity_kwh > 0)
+    CHECK(capacity_kwh >= 0)
 );
 
 
@@ -56,4 +56,4 @@ CREATE TABLE Solar_pannel_readings(
 
     CHECK(generation_watt >=0),
     CHECK(generation_hourly_watt >=0)
-)
+);

@@ -3,66 +3,20 @@ import time
 import logging
 import datetime
 from Kafka_consumer import Kafka_consumer
-from database import Database
-
-prev_hour = None
-prev_minute = None
+from Database import Database
+from Kafka_db import Kafka_db
 
 
-def update_db(db, value):
-	global prev_minute, prev_hour
 
-	time_stamp = str(datetime.datetime.now().replace(microsecond=0))
-	current_hour = time_stamp.split()[1].split(':')[0]
-	current_minute = time_stamp.split()[1].split(':')[1]
-
-
-	if current_hour != prev_hour:
-
-		for key in value['batteries'].keys():
-
-			query = (
-			    f"""
-				INSERT INTO Battery_readings VALUES(NULL, {key.split('_')[-1]}, {value['batteries'][key]['current_energy_wh']}, {value['hourly_discharging'][current_hour]}, '{value['batteries'][key]['status']}', NOW(), NOW());
-			    """
-			)
-			db.insert_query(query)
-
-		prev_hour = current_hour
-		logging.info('Database : insert_query done')
-		logging.info("-------------------------------------------------")
-
-
-	elif current_minute != prev_minute:
-
-		for key in value['batteries'].keys():
-			query = (
-			    f"""
-				UPDATE Battery_readings 
-				SET current_energy_watt = {value['batteries'][key]['current_energy_wh']}, 
-				current_hourly_consumption_watt = {value['hourly_discharging'][current_hour]}, 
-				status = '{value['batteries'][key]['status']}',
-				updated_at = NOW()
-
-				WHERE battery = {key.split('_')[-1]}
-				ORDER BY id DESC LIMIT 1
-			    """
-			)
-			db.update_query(query)
-
-		prev_minute = current_minute
-		logging.info('Database : update_query done')
-		logging.info("-------------------------------------------------")
-
-
-	
 def main():
-	consumer = Kafka_consumer(topic_name = ["battery_data"])
+	consumer = Kafka_consumer(topic_name = ["battery_data", "solar_energy_data"])
 	consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
 		                     consumer_group = "kafka_to_db",
 		                     auto_offset_reset = "latest")
 	
 	db = Database()
+	kafka_db_battery = Kafka_db(db, logging)
+	kafka_db_sola_pannel = Kafka_db(db, logging)
 
 	while True:
 		msg = consumer.consume(timeout = 1)
@@ -78,7 +32,10 @@ def main():
 			value = dict(json.loads(msg.value()))
 			offset = msg.offset()
 
-			update_db(db, value)
+			if key == 'bms':
+				kafka_db_battery.update_battery_db(value)
+			elif key == 'solar_w':
+				kafka_db_sola_pannel.update_solar_pannels_db(value)
 
 			
 

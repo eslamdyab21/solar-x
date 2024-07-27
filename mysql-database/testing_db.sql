@@ -11,3 +11,8 @@ INSERT INTO Battery_readings VALUES (NULL, 3, 2014.51, 9985.49, 'discharging', N
 
 INSERT INTO Solar_pannels VALUES (NULL, 'Roof Panel', 10);
 INSERT INTO Solar_pannel_readings VALUES (NULL, 1, 50642.42, 3021.23, NOW(), NOW());
+
+
+
+INSERT INTO Home VALUES (NULL, 'Family Home');
+INSERT INTO Home_readings VALUES (NULL, 1, 50642.42, 3021.23, NOW(), NOW());

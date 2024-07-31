@@ -25,6 +25,7 @@ class BMS():
             battery_name = 'battery_' + str(i)
             if battery_name not in self.batteries_status['batteries']:
                 self.batteries_status['batteries'][battery_name] = {"capacity_kwh": battery_capacity, 
+                                                "max_charge_speed_w": HOME_CONFIGURATIONS['batteries_charge_max_speed_w_second'][i-1],
                                                  "current_energy_wh":battery_capacity*1000,
                                                  "is_charging":0,
                                                  "status":'ideal',
@@ -32,8 +33,8 @@ class BMS():
                 i +=1
 
         self.batteries_status['batteries']['battery_3']['current_energy_wh'] = 10000
-        self.batteries_status['batteries']['battery_2']['current_energy_wh'] = 11000
-        self.batteries_status['batteries']['battery_1']['current_energy_wh'] = 12000
+        self.batteries_status['batteries']['battery_2']['current_energy_wh'] = 8540
+        self.batteries_status['batteries']['battery_1']['current_energy_wh'] = 9860
 
 
 

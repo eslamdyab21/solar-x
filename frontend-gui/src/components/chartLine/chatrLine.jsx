@@ -6,7 +6,7 @@ import './chartLine.css'
 const ChartLine = (props) => {
     
     let current_consumption_w_accumulated_hourly_chart = []
-    let keys = Object.keys(props.current_consumption_w_accumulated_hourly).sort();
+    let keys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     keys.forEach((key) => {
         current_consumption_w_accumulated_hourly_chart.push({"time":key, "Wh":props.current_consumption_w_accumulated_hourly[key]})
     });

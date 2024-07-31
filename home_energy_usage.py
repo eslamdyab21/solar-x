@@ -4,15 +4,18 @@ import random
 import json
 import time
 from Kafka_producer import Kafka_producer
+from mysql_database.Database import Database
 
 
 consumption_acumm = 0
 current_consumption = 0
 power_w_accumulated_hourly = 0
 prev_hour = 0
-power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
-    "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+power_w_accumulated_hourly_set = {"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,
+    "8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
     "21":0,"22":0,"23":0}
+
+db = Database()
 
 
 def load_home_load():
@@ -20,6 +23,24 @@ def load_home_load():
         HOME_USAGE_POWER = json.load(f)
 
     return HOME_USAGE_POWER
+
+
+def load_home_day_data_from_db():
+    global consumption_acumm, power_w_accumulated_hourly_set, power_w_accumulated_hourly
+
+    time_stamp = datetime.datetime.now().replace(microsecond=0)
+    current_hour = time_stamp.hour
+
+    result = db.load_home_day_data()
+    if result:
+        for record in result:
+
+            consumption_acumm = float(record[0])
+            power_w_accumulated_hourly_set[str(record[-1].hour)] = float(record[1])
+
+            if current_hour == record[-1].hour:
+                power_w_accumulated_hourly = float(record[1])
+
 
 
 def get_time_in_seconds(t):
@@ -37,7 +58,7 @@ def get_power_w_accumulated_hourly(current_hour, current_total_consumption):
     else:
         power_w_accumulated_hourly = 0
 
-    power_w_accumulated_hourly_set[current_hour] = round(power_w_accumulated_hourly,2)
+    power_w_accumulated_hourly_set[str(current_hour)] = round(power_w_accumulated_hourly,2)
 
     prev_hour = current_hour
 
@@ -46,9 +67,9 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
     global consumption_acumm, current_consumption, power_w_accumulated_hourly_set
     current_total_consumption = 0
 
-    time_stamp = str(datetime.datetime.now().replace(microsecond=0))
-    current_time = get_time_in_seconds(time_stamp.split()[1])
-    current_hour = time_stamp.split()[1].split(':')[0]
+    time_stamp = datetime.datetime.now().replace(microsecond=0)
+    current_hour = time_stamp.hour
+    current_time = get_time_in_seconds(str(time_stamp).split()[1])
 
     
 
@@ -69,15 +90,15 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
     consumption_acumm += current_total_consumption
     consumption_acumm = round(consumption_acumm,2)
 
-    if int(current_hour) == 1:
+    if current_hour == 1:
         consumption_acumm = 0
-        power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
-                                            "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+        power_w_accumulated_hourly_set = {"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,
+                                            "8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
                                             "21":0,"22":0,"23":0}
 
     get_power_w_accumulated_hourly(current_hour, current_total_consumption)
 
-    energy_consumption = {'time_stamp':time_stamp, 'current_consumption_w':current_total_consumption, 
+    energy_consumption = {'time_stamp':str(time_stamp), 'current_consumption_w':current_total_consumption, 
                           'consumption_accumulated_w':consumption_acumm, 'current_consumption_w_accumulated_hourly':power_w_accumulated_hourly_set}
 
     return energy_consumption
@@ -89,6 +110,7 @@ def main():
     producer.kafka_producer_conf(broker_address = "localhost:9092")
 
     HOME_USAGE_POWER = load_home_load()
+    load_home_day_data_from_db()
     while True:
         energy_consumption = home_energy_usage_per_second(HOME_USAGE_POWER)
         

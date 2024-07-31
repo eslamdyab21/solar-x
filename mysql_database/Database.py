@@ -60,3 +60,34 @@ class Database():
         self.connection.commit()
 
 
+    def load_batteries_day_data(self):
+        query = (
+                f"""
+                SELECT battery, current_energy_watt, current_hourly_consumption_watt, created_at FROM Battery_readings WHERE DATE(created_at) = CURDATE(); 
+                """
+            )
+        
+        result = self.select_query(query)
+        return result
+    
+
+    def load_home_day_data(self):
+        query = (
+                f"""
+                SELECT consumption_watt, consumption_hourly_watt, created_at FROM Home_readings WHERE DATE(created_at) = CURDATE(); 
+                """
+            )
+        
+        result = self.select_query(query)
+        return result
+    
+
+    def load_solar_day_data(self):
+        query = (
+                f"""
+                SELECT generation_watt, generation_hourly_watt, created_at FROM Solar_pannel_readings WHERE DATE(created_at) = CURDATE(); 
+                """
+            )
+        
+        result = self.select_query(query)
+        return result

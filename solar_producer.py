@@ -4,14 +4,35 @@ import datetime
 import random
 from Kafka_consumer import Kafka_consumer
 from Kafka_producer import Kafka_producer
+from mysql_database.Database import Database
 
 
 solar_power_w_accumulated = 0
 solar_power_w_accumulated_hourly = 0
 prev_hour = 0
-solar_power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
-    "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+solar_power_w_accumulated_hourly_set = {"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,
+    "8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
     "21":0,"22":0,"23":0}
+
+db = Database()
+
+
+def load_solar_day_data_from_db():
+    global solar_power_w_accumulated, solar_power_w_accumulated_hourly_set, solar_power_w_accumulated_hourly
+
+    time_stamp = datetime.datetime.now().replace(microsecond=0)
+    current_hour = time_stamp.hour
+
+    result = db.load_solar_day_data()
+    if result:
+        for record in result:
+
+            solar_power_w_accumulated = float(record[0])
+            solar_power_w_accumulated_hourly_set[str(record[-1].hour)] = float(record[1])
+
+            if current_hour == record[-1].hour:
+                solar_power_w_accumulated_hourly = float(record[1])
+
 
 def get_time_in_seconds(t):
     hours = int(t.split(':')[0])*3600
@@ -56,8 +77,8 @@ def get_power_w_accumulated(sun_rise, sun_set, time_stamp, solar_panel_rating_w_
 
     if int(cuurent_hour) == 1:
         solar_power_w_accumulated = 0
-        solar_power_w_accumulated_hourly_set = {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,"06":0,"07":0,
-                                                "08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
+        solar_power_w_accumulated_hourly_set = {"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,
+                                                "8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,
                                                 "21":0,"22":0,"23":0}
     
 
@@ -117,6 +138,8 @@ def main():
     producer = Kafka_producer(topic_name = "solar_energy_data", message_key = "solar_w")
     producer.kafka_producer_conf(broker_address = "localhost:9092")
 
+    load_solar_day_data_from_db()
+    
     value = None
     while True:
         msg = consumer.consume(timeout = 1, store_offset = True)

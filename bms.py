@@ -2,18 +2,23 @@ import json
 import logging
 import random
 import datetime
+from mysql_database.Database import Database
+
 
 class BMS():
 
     def __init__(self):
         self.batteries_status = {'time_stamp':None, 'batteries':{}, 
-                                 'hourly_discharging': {"00":0,"01":0,"02":0,"03":0,"04":0,"05":0,
-                                 "06":0,"07":0,"08":0,"09":0,"10":0,"11":0,"12":0,"13":0,"14":0,
+                                 'hourly_discharging': {"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,
+                                 "6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,
                                  "15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0}}
 
         self.reset_hourly_discharging_flag = True
+        self.db = Database()
+
 
         self.load_batteries_info()
+        self.load_batteries_day_data_from_db()
         
 
     def load_batteries_info(self):
@@ -36,6 +41,14 @@ class BMS():
         self.batteries_status['batteries']['battery_2']['current_energy_wh'] = 8540
         self.batteries_status['batteries']['battery_1']['current_energy_wh'] = 9860
 
+
+    def load_batteries_day_data_from_db(self):
+        result = self.db.load_batteries_day_data()
+        if result:
+            for record in result:
+                battery_name = 'battery_' + str(record[0])
+                self.batteries_status['batteries'][battery_name]['current_energy_wh'] = float(record[1])
+                self.batteries_status['hourly_discharging'][str(record[-1].hour)] = float(record[2])
 
 
     def reset_hourly_discharging(self):

@@ -103,8 +103,8 @@ const AreaLineChart = (props) => {
                   dataKey="battery_consumption"
                   name="Battery"
                   // stackId="3"
-                  stroke="#49d8ff"
-                  fill="#49d8ff"
+                  stroke="#A9A5FF"
+                  fill="#7a78c2"
                   unit=' Kwh'
                 />
     

@@ -68,6 +68,8 @@ class Database():
             )
         
         result = self.select_query(query)
+
+        print(f'Database : load_batteries_day_data')
         return result
     
 
@@ -79,6 +81,8 @@ class Database():
             )
         
         result = self.select_query(query)
+
+        print(f'Database : load_home_day_data')
         return result
     
 
@@ -90,4 +94,6 @@ class Database():
             )
         
         result = self.select_query(query)
+
+        print(f'Database : load_solar_day_data')
         return result

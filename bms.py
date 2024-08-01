@@ -127,8 +127,8 @@ class BMS():
         max_energy = 0
         full_discharged_counter = 0
 
-        time_stamp = str(datetime.datetime.now().replace(microsecond=0))
-        current_hour = time_stamp.split()[1].split(':')[0]
+        time_stamp = datetime.datetime.now().replace(microsecond=0)
+        current_hour = str(time_stamp.hour)
 
         for battery in self.batteries_status['batteries'].keys():
             if int(self.batteries_status['batteries'][battery]['current_energy_wh']) == 0:

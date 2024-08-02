@@ -3,9 +3,10 @@ version: '3'
 services:
   solarx-db:
     image: mysql:8.0
+    container_name: solarx-db
     restart: always
     environment:
-      MYSQL_DATABASE: 'solarx'
+      # MYSQL_DATABASE: 'solarx'
       MYSQL_USER: 'dyab'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
@@ -15,7 +16,10 @@ services:
       - '3306'
     volumes:
       - ./database-schema:/docker-entrypoint-initdb.d
-      - my-db:/var/lib/mysql
+      - solarx-db:/var/lib/mysql
+      - "/etc/timezone:/etc/timezone:ro" 
+      - "/etc/localtime:/etc/localtime:ro"
 
 volumes:
-  my-db:
+  solarx-db:
+    name: solarx-db

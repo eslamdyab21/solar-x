@@ -7,7 +7,7 @@ const TotalEnergyX = (props) => {
     const Energy = props.EnergyData
     
     return(
-        <div className="topBox">
+        <div className="LineBox">
             <div className="boxInfo">
                 <div className="title">
                     <img src={props.icon} alt="" />

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import TotalEnergyX from '../components/totalEergyX/totalEergyX';
 import PowerFlow from '../components/powerFlow/powerFlow';
 import AreaLineChart from '../components/areaLineChart/areaLineChart';
+import TopGenerationDays from '../components/topGenerationDays/topGenerationDays';
 import './home.css'
 
 const WS_URL = "ws://localhost:8080"
@@ -42,7 +43,7 @@ const Home = () => {
     return (
         <div className="home">
             <div className="box box_3row_1col">
-                Top Days
+                <TopGenerationDays />
             </div>
             
             <div className="box box_1row_2col">

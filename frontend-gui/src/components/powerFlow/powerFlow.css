@@ -21,7 +21,7 @@
 .box_1row_1col_flow_solar_icon {
     grid-column: span 1;
     grid-row: span 1;
-    background-color: beige;
+    background-color: rgb(255, 255, 255);
     opacity: 0.85;
 }
 
@@ -61,7 +61,7 @@
 .box_1row_1col_flow_grid_power_icon {
     grid-column: span 1;
     grid-row: span 1;
-    background-color: beige;
+    background-color: rgb(255, 255, 255);
     opacity: 0.85;
 }
 

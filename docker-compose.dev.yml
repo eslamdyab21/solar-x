@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  solarx-gui:
+    container_name: gui
+
+    build:
+      context: ./frontend-gui
+      dockerfile: Dockerfile.dev
+      
+
+    command: npm run start
+
+    ports:
+      - 3000:3000
+    
+    volumes:
+      - ./frontend-gui/src:/app/src

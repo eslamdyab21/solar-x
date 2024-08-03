@@ -15,7 +15,7 @@ services:
       - 3000:3000
     
     volumes:
-      - ./frontend-gui/src:/app/src
+      - ./frontend-gui:/app
 
 
   solarx-backend:
@@ -32,7 +32,7 @@ services:
       - 8000:8000
     
     volumes:
-      - ./kafka-websocket/src:/app/src
+      - ./kafka-websocket:/app
 
 
   zookeeper:

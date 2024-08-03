@@ -16,3 +16,21 @@ services:
     
     volumes:
       - ./frontend-gui/src:/app/src
+
+
+  solarx-backend:
+    container_name: backend
+
+    build:
+      context: ./kafka-websocket
+      dockerfile: Dockerfile.dev
+      
+
+    command: npm run dev
+
+    ports:
+      - 8000:8000
+    
+    volumes:
+      - ./kafka-websocket/src:/app/src
+

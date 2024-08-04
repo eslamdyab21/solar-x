@@ -1,8 +1,11 @@
+import dotenv from 'dotenv'
 import { Kafka } from "kafkajs";
 
-require('dotenv').config();
 
-const HOST = process.env.BROKER_HOST;
+dotenv.config()
+
+let HOST = process.env.BROKER_HOST;
+console.log(`${HOST}:9092`)
 
 const kafkaClient = new Kafka({
   clientId: "solarX",

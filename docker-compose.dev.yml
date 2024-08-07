@@ -7,7 +7,6 @@ services:
     build:
       context: ./frontend-gui
       dockerfile: Dockerfile.dev
-      
 
     command: npm run start
 
@@ -15,16 +14,15 @@ services:
       - 3000:3000
     
     volumes:
-      - ./frontend-gui:/app
+      - ./frontend-gui/src:/app/src
 
 
   solarx-backend:
     container_name: backend
-
+    hostname: backend
     build:
       context: ./kafka-websocket
       dockerfile: Dockerfile.dev
-      
 
     command: npm run dev
 
@@ -32,7 +30,10 @@ services:
       - 8000:8000
     
     volumes:
-      - ./kafka-websocket:/app
+      - ./kafka-websocket/src:/app/src
+
+    depends_on:
+      - kafka
 
 
   zookeeper:
@@ -48,11 +49,13 @@ services:
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
+    hostname: kafka
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     depends_on:
       - zookeeper
+
 

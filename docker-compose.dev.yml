@@ -28,6 +28,9 @@ services:
 
     ports:
       - 8000:8000
+      - 8080:8080
+      - 9090:9090
+      - 9191:9191
     
     volumes:
       - ./kafka-websocket/src:/app/src
@@ -57,5 +60,3 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     depends_on:
       - zookeeper
-
-

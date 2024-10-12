@@ -3,7 +3,8 @@ version: "3"
 services:
 
   phpmyadmin:
-    image: phpmyadmin:5.2
+    image: phpmyadmin/phpmyadmin:5.0
+    container_name: phpmyadmin
 
     ports:
       - 800:80

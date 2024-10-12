@@ -7,9 +7,9 @@ services:
     restart: always
     environment:
       # MYSQL_DATABASE: 'solarx'
-      MYSQL_USER: 'dyab'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_USER:  ${DATABASE_NAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - '3306:3306'
     expose:

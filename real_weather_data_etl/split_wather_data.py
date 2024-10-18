@@ -1,10 +1,52 @@
 import json
 
 
-def solar_intensity_processing(file_path):
+
+base_dir = 'EGY_QH_Helwan.623780_TMYx.2009-2023/'
+solar_intensity_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.clm'
+temp_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.pvsyst'
+year = 2013
+
+
+def temp_processing():
 	day_info_dict = {}
-	year = 2013
-	with open(file_path, 'rb') as file:
+	prev_date = None
+
+	with open(temp_file_path, 'rb') as file:
+		for line in file:
+			info = line.decode("utf-8", errors='ignore').strip().split(',')
+
+			if len(info) == 11:
+				month = info[1]
+				day = info[2]
+				hour = info[3]
+				date = str(day) + '-' + str(month) + '-' + str(year)
+
+
+				if date in day_info_dict.keys():
+					day_info_dict[date].append({'hour': hour, 'solar_intensity': -1, 'temp': info[-3]})
+					prev_date = date
+
+				else:
+					if len(day_info_dict) > 3:
+						# print(date, prev_date, day_info_dict)
+						solar_intensity_processing(day_info_dict, prev_date)
+
+					day_info_dict[date] = []
+					day_info_dict[date].append({'hour': hour, 'solar_intensity': -1, 'temp': info[-3]})
+
+
+	del day_info_dict[f'Day-Month-{year}']
+	del day_info_dict[f'--{year}']
+
+	# print(day_info_dict)
+	print(json.dumps(day_info_dict, indent=2))
+
+
+
+
+def solar_intensity_processing(day_info_dict, date):
+	with open(solar_intensity_file_path, 'rb') as file:
 		for line in file:
 			line = line.decode("utf-8").strip()
 
@@ -15,28 +57,24 @@ def solar_intensity_processing(file_path):
 					month = day_month[-1]
 					day = day_month[2]
 					hour = 1
-					date = str(day) + '-' + str(month) + '-' + str(year)
-					day_info_dict[date] = []
+					current_date = str(day) + '-' + str(month) + '-' + str(year)
 
-			# add day solar intensity info	
 			else:
-				day_info = line.split(',')
-				if len(day_info) == 6:
+				info = line.split(',')
+				if len(info) == 6:
 					# col 3: Direct normal solar intensity   (W/m**2)
 					# which is in index 2
-					day_info_dict[date].append({'hour': hour, 'solar_intensity': day_info[2], 'temp': 0})
+					if current_date == date:
+						day_info_dict[date][hour-1]['solar_intensity'] = info[2]
+					
 					hour += 1
 
 
-	print(json.dumps(day_info_dict, indent=2))
 
 
 def main():
-	base_dir = 'EGY_QH_Helwan.623780_TMYx.2009-2023/'
-	solar_intensity_file_path = 'EGY_QH_Helwan.623780_TMYx.2009-2023.clm'
-	temp_file_path = 'EGY_QH_Helwan.623780_TMYx.2009-2023.pvsyst'
-
-	solar_intensity_processing(base_dir + solar_intensity_file_path)
+	
+	temp_processing()
 
 
 main()

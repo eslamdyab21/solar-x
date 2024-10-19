@@ -1,11 +1,25 @@
 import json
-
+import csv
 
 
 base_dir = 'EGY_QH_Helwan.623780_TMYx.2009-2023/'
 solar_intensity_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.clm'
 temp_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.pvsyst'
 year = 2013
+
+
+def save_file(day_info_dict, date):
+	base_dir = 'weather_history_splitted/'
+
+	# with open(base_dir + date, 'w') as file:
+	# 	json.dump(day_info_dict, file)
+	
+	keys = day_info_dict[0].keys()
+
+	with open(base_dir + date + '.csv', 'w', newline='') as output_file:
+		dict_writer = csv.DictWriter(output_file, keys)
+		dict_writer.writeheader()
+		dict_writer.writerows(day_info_dict)
 
 
 def temp_processing():
@@ -31,6 +45,8 @@ def temp_processing():
 					if len(day_info_dict) > 3:
 						# print(date, prev_date, day_info_dict)
 						solar_intensity_processing(day_info_dict, prev_date)
+						# save this date data in a separate file
+						save_file(day_info_dict[prev_date], prev_date)
 
 					day_info_dict[date] = []
 					day_info_dict[date].append({'hour': hour, 'solar_intensity': -1, 'temp': info[-3]})
@@ -40,7 +56,7 @@ def temp_processing():
 	del day_info_dict[f'--{year}']
 
 	# print(day_info_dict)
-	print(json.dumps(day_info_dict, indent=2))
+	# print(json.dumps(day_info_dict, indent=2))
 
 
 

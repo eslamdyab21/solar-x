@@ -42,18 +42,20 @@ def temp_processing():
 					prev_date = date
 
 				else:
-					if len(day_info_dict) > 3:
-						# print(date, prev_date, day_info_dict)
-						solar_intensity_processing(day_info_dict, prev_date)
-						# save this date data in a separate file
+					# print(date, prev_date, day_info_dict)
+					solar_intensity_processing(day_info_dict, prev_date)
+
+					# save this date data in a separate file
+					if day_info_dict and prev_date:
 						save_file(day_info_dict[prev_date], prev_date)
 
+					day_info_dict = {}
 					day_info_dict[date] = []
 					day_info_dict[date].append({'hour': hour, 'solar_intensity': -1, 'temp': info[-3]})
 
 
-	del day_info_dict[f'Day-Month-{year}']
-	del day_info_dict[f'--{year}']
+	# del day_info_dict[f'Day-Month-{year}']
+	# del day_info_dict[f'--{year}']
 
 	# print(day_info_dict)
 	# print(json.dumps(day_info_dict, indent=2))

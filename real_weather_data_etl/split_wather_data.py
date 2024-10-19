@@ -1,5 +1,6 @@
 import json
 import csv
+import random
 
 
 base_dir = 'EGY_QH_Helwan.623780_TMYx.2009-2023/'
@@ -8,18 +9,41 @@ temp_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.pvsyst'
 year = 2013
 
 
-def save_file(day_info_dict, date):
+
+def add_minutes_freq(day_info, date):
+	day_info_by_minute = []
+
+	for index in range(len(day_info) - 1):
+		for m in range(1, 60):
+			hour = day_info[index]['hour']
+
+			current_hour_solar_intensity = float(day_info[index]['solar_intensity'])
+			next_hour_solar_intensity = float(day_info[index+1]['solar_intensity'])
+			solar_intensity = random.uniform(current_hour_solar_intensity, next_hour_solar_intensity) 
+
+			current_hour_temp = float(day_info[index]['temp'])
+			next_hour_temp = float(day_info[index+1]['temp'])
+			temp = random.uniform(current_hour_temp, next_hour_temp)
+
+			day_info_by_minute.append({'hour': hour, 'minute':m, 'solar_intensity': solar_intensity, 'temp': temp})
+
+	
+	return day_info_by_minute
+
+
+
+def save_file(day_info, date):
 	base_dir = 'weather_history_splitted/'
 
 	# with open(base_dir + date, 'w') as file:
 	# 	json.dump(day_info_dict, file)
 	
-	keys = day_info_dict[0].keys()
+	keys = day_info[0].keys()
 
 	with open(base_dir + date + '.csv', 'w', newline='') as output_file:
 		dict_writer = csv.DictWriter(output_file, keys)
 		dict_writer.writeheader()
-		dict_writer.writerows(day_info_dict)
+		dict_writer.writerows(day_info)
 
 
 def temp_processing():
@@ -47,7 +71,11 @@ def temp_processing():
 
 					# save this date data in a separate file
 					if day_info_dict and prev_date:
-						save_file(day_info_dict[prev_date], prev_date)
+						# increase the frequency to minutes
+						day_info_by_minute = add_minutes_freq(day_info_dict[prev_date], prev_date)
+						# save_file(day_info_dict[prev_date], prev_date)
+						save_file(day_info_by_minute, prev_date)
+
 
 					day_info_dict = {}
 					day_info_dict[date] = []
@@ -62,7 +90,7 @@ def temp_processing():
 
 
 
-
+ 
 def solar_intensity_processing(day_info_dict, date):
 	with open(solar_intensity_file_path, 'rb') as file:
 		for line in file:

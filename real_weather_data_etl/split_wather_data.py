@@ -1,13 +1,13 @@
 import json
 import csv
 import random
-
+import os
 
 base_dir = 'EGY_QH_Helwan.623780_TMYx.2009-2023/'
 solar_intensity_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.clm'
 temp_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.pvsyst'
 year = 2013
-
+next_day_line_index = None
 
 
 def add_minutes_freq(day_info, date):
@@ -19,11 +19,11 @@ def add_minutes_freq(day_info, date):
 
 			current_hour_solar_intensity = float(day_info[index]['solar_intensity'])
 			next_hour_solar_intensity = float(day_info[index+1]['solar_intensity'])
-			solar_intensity = random.uniform(current_hour_solar_intensity, next_hour_solar_intensity) 
+			solar_intensity = round(random.uniform(current_hour_solar_intensity, next_hour_solar_intensity), 2) 
 
-			current_hour_temp = float(day_info[index]['temp'])
-			next_hour_temp = float(day_info[index+1]['temp'])
-			temp = random.uniform(current_hour_temp, next_hour_temp)
+			current_hour_temp = float(day_info[index]['temp']) - 1
+			next_hour_temp = float(day_info[index+1]['temp']) + 1
+			temp = round(random.uniform(current_hour_temp, next_hour_temp), 2)
 
 			day_info_by_minute.append({'hour': hour, 'minute':m, 'solar_intensity': solar_intensity, 'temp': temp})
 
@@ -34,10 +34,10 @@ def add_minutes_freq(day_info, date):
 
 def save_file(day_info, date):
 	base_dir = 'weather_history_splitted/'
-
-	# with open(base_dir + date, 'w') as file:
-	# 	json.dump(day_info_dict, file)
 	
+	if not os.path.exists(base_dir):
+		os.makedirs(base_dir)
+
 	keys = day_info[0].keys()
 
 	with open(base_dir + date + '.csv', 'w', newline='') as output_file:
@@ -65,12 +65,9 @@ def temp_processing():
 					day_info_dict[date].append({'hour': hour, 'solar_intensity': -1, 'temp': info[-3]})
 					prev_date = date
 
-				else:
-					# print(date, prev_date, day_info_dict)
-					solar_intensity_processing(day_info_dict, prev_date)
-
-					# save this date data in a separate file
+				else:					
 					if day_info_dict and prev_date:
+						solar_intensity_processing(day_info_dict, prev_date)
 						# increase the frequency to minutes
 						day_info_by_minute = add_minutes_freq(day_info_dict[prev_date], prev_date)
 						# save_file(day_info_dict[prev_date], prev_date)
@@ -82,44 +79,36 @@ def temp_processing():
 					day_info_dict[date].append({'hour': hour, 'solar_intensity': -1, 'temp': info[-3]})
 
 
-	# del day_info_dict[f'Day-Month-{year}']
-	# del day_info_dict[f'--{year}']
-
-	# print(day_info_dict)
-	# print(json.dumps(day_info_dict, indent=2))
-
 
 
  
 def solar_intensity_processing(day_info_dict, date):
+	global next_day_line_index
+	hour = 1
+
 	with open(solar_intensity_file_path, 'rb') as file:
-		for line in file:
-			line = line.decode("utf-8").strip()
+		for line_index, line in enumerate(file):
 
-			# new day
-			if line[0] == '*':
-				day_month = line.split()
-				if len(day_month) > 1:
-					month = day_month[-1]
-					day = day_month[2]
-					hour = 1
-					current_date = str(day) + '-' + str(month) + '-' + str(year)
+			if next_day_line_index is None:
+				line = line.decode("utf-8").strip()
+				if line == '* day  1 month  1':
+					next_day_line_index = line_index + 1
 
-			else:
+				
+			elif line_index >= next_day_line_index:
+				line = line.decode("utf-8").strip()
 				info = line.split(',')
-				if len(info) == 6:
-					# col 3: Direct normal solar intensity   (W/m**2)
-					# which is in index 2
-					if current_date == date:
-						day_info_dict[date][hour-1]['solar_intensity'] = info[2]
-					
-					hour += 1
+				day_info_dict[date][hour-1]['solar_intensity'] = info[2]
 
+				hour += 1
+
+				if hour == 25:
+					next_day_line_index = line_index + 2
+					break
 
 
 
 def main():
-	
 	temp_processing()
 
 

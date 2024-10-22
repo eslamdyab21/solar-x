@@ -2,15 +2,16 @@ import json
 import csv
 import random
 import os
+import time
 
 base_dir = 'EGY_QH_Helwan.623780_TMYx.2009-2023/'
 solar_intensity_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.clm'
 temp_file_path = base_dir + 'EGY_QH_Helwan.623780_TMYx.2009-2023.pvsyst'
 year = 2013
-next_day_line_index = None
+current_line_pos_pointer = None
+day_info_by_minute = []
 
-
-def add_minutes_freq(day_info, date):
+def add_minutes_freq(day_info):
 	day_info_by_minute = []
 
 	for index in range(len(day_info) - 1):
@@ -69,7 +70,7 @@ def temp_processing():
 					if day_info_dict and prev_date:
 						solar_intensity_processing(day_info_dict, prev_date)
 						# increase the frequency to minutes
-						day_info_by_minute = add_minutes_freq(day_info_dict[prev_date], prev_date)
+						day_info_by_minute = add_minutes_freq(day_info_dict[prev_date])
 						# save_file(day_info_dict[prev_date], prev_date)
 						save_file(day_info_by_minute, prev_date)
 
@@ -83,27 +84,32 @@ def temp_processing():
 
  
 def solar_intensity_processing(day_info_dict, date):
-	global next_day_line_index
+	global current_line_pos_pointer
 	hour = 1
 
-	with open(solar_intensity_file_path, 'rb') as file:
-		for line_index, line in enumerate(file):
 
-			if next_day_line_index is None:
+	with open(solar_intensity_file_path, 'rb') as file:
+		if current_line_pos_pointer is None:
+			for line in file:
+				
 				line = line.decode("utf-8").strip()
 				if line == '* day  1 month  1':
-					next_day_line_index = line_index + 1
+					current_line_pos_pointer = file.tell()
 
-				
-			elif line_index >= next_day_line_index:
+
+		if current_line_pos_pointer:
+			file.seek(current_line_pos_pointer)
+			
+			for line in file:
 				line = line.decode("utf-8").strip()
 				info = line.split(',')
-				day_info_dict[date][hour-1]['solar_intensity'] = info[2]
 
+				if len(info) == 6:
+					day_info_dict[date][hour-1]['solar_intensity'] = info[2]
+					
 				hour += 1
-
-				if hour == 25:
-					next_day_line_index = line_index + 2
+				if hour == 26:
+					current_line_pos_pointer = file.tell()
 					break
 
 

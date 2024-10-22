@@ -59,7 +59,7 @@ def temp_processing():
 				month = info[1]
 				day = info[2]
 				hour = info[3]
-				date = str(day) + '-' + str(month) + '-' + str(year)
+				date = str(year) + '-' + str(month) + '-' + str(day)
 
 
 				if date in day_info_dict.keys():

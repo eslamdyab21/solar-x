@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  solarx-db:
+    image: mysql:8.0
+    container_name: solarx-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./database-schema:/docker-entrypoint-initdb.d
+      - solarx-db:/var/lib/mysql
+      - "/etc/timezone:/etc/timezone:ro" 
+      - "/etc/localtime:/etc/localtime:ro"
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: solarx-phpmyadmin
+
+    ports:
+      - 800:80
+
+    environment:
+      - PMA_ARBITRARY=1
+
+    restart: unless-stopped
+
+
+volumes:
+  solarx-db:
+    name: solarx-db

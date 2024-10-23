@@ -1,0 +1,51 @@
+
+.topBox{
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-around;
+    height: 100%;
+}
+
+
+.h1TitleCenter{
+    text-align: center;
+}
+
+
+.listItem {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #384256;
+    
+}
+
+
+
+.dayTexts {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center; 
+    gap: 5px;
+}
+
+
+
+.name {
+    font-size: 15px;
+    font-weight: 700;
+}
+    
+
+
+.date {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+.amount {
+    font-weight: 700;
+}

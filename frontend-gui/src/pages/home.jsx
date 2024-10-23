@@ -5,13 +5,13 @@ import AreaLineChart from '../components/areaLineChart/areaLineChart';
 import TopGenerationDays from '../components/topGenerationDays/topGenerationDays';
 import './home.css'
 
-#const WS1_URL = process.env.REACT_APP_WS1_URL
-#const WS2_URL = process.env.REACT_APP_WS2_URL
-#const WS3_URL = process.env.REACT_APP_WS3_URL
+const WS1_URL = process.env.REACT_APP_WS1_URL
+const WS2_URL = process.env.REACT_APP_WS2_URL
+const WS3_URL = process.env.REACT_APP_WS3_URL
 
-const WS1_URL = "ws://172.18.0.5:8080"
-const WS2_URL = "ws://172.18.0.5:9090"
-const WS3_URL = "ws://172.18.0.5:9191"
+// const WS1_URL = "ws://172.18.0.5:8080"
+// const WS2_URL = "ws://172.18.0.5:9090"
+// const WS3_URL = "ws://172.18.0.5:9191"
 
 console.log('WS1_URL: ', WS1_URL)
 console.log('WS2_URL: ', WS2_URL)

@@ -87,8 +87,8 @@ class Kafka_db():
             query = (
                 f"""
                 UPDATE Solar_pannel_readings 
-                SET generation_watt = {value['consumption_accumulated_w']}, 
-                generation_hourly_watt = {value['current_consumption_w_accumulated_hourly'][str(self.current_hour)]}, 
+                SET current_generation_watt = {value['consumption_accumulated_w']}, 
+                current_generation_hourly_watt = {value['current_consumption_w_accumulated_hourly'][str(self.current_hour)]}, 
                 updated_at = NOW()
 
                 ORDER BY id DESC LIMIT 1
@@ -124,8 +124,8 @@ class Kafka_db():
             query = (
                 f"""
                 UPDATE Home_readings 
-                SET consumption_watt = {value['consumption_accumulated_w']}, 
-                consumption_hourly_watt = {value['current_consumption_w_accumulated_hourly'][str(self.current_hour)]}, 
+                SET current_consumption_watt = {value['consumption_accumulated_w']}, 
+                current_consumption_hourly_watt = {value['current_consumption_w_accumulated_hourly'][str(self.current_hour)]}, 
                 updated_at = NOW()
 
                 ORDER BY id DESC LIMIT 1

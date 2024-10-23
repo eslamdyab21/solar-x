@@ -1,5 +1,5 @@
 
-CREATE DATABASE SolarX;
+CREATE DATABASE IF NOT EXISTS SolarX;
 
 USE SolarX;
 
@@ -46,16 +46,16 @@ CREATE TABLE Solar_pannels(
 CREATE TABLE Solar_pannel_readings(
     id INT AUTO_INCREMENT,
     pannel INT,
-    generation_watt FLOAT NOT NULL,
-    generation_hourly_watt FLOAT NOT NULL,
+    current_generation_watt FLOAT NOT NULL,
+    current_generation_hourly_watt FLOAT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
 
     PRIMARY KEY (id),
     FOREIGN KEY (pannel) REFERENCES Solar_pannels(id),
 
-    CHECK(generation_watt >=0),
-    CHECK(generation_hourly_watt >=0)
+    CHECK(current_generation_watt >=0),
+    CHECK(current_generation_hourly_watt >=0)
 );
 
 
@@ -67,7 +67,7 @@ CREATE TABLE Home(
 );
 
 
-CREATE TABLE Home_devices_consumption(
+CREATE TABLE Home_devices_power_rating(
     id INT AUTO_INCREMENT,
     home INT,
     name VARCHAR(100) NOT NULL,
@@ -88,14 +88,14 @@ CREATE TABLE Home_devices_consumption(
 CREATE TABLE Home_readings(
     id INT AUTO_INCREMENT,
     home INT,
-    consumption_watt FLOAT NOT NULL,
-    consumption_hourly_watt FLOAT NOT NULL,
+    current_consumption_watt FLOAT NOT NULL,
+    current_consumption_hourly_watt FLOAT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
 
     PRIMARY KEY (id),
     FOREIGN KEY (home) REFERENCES Home(id),
 
-    CHECK(consumption_watt >=0),
-    CHECK(consumption_hourly_watt >=0)
+    CHECK(current_consumption_watt >=0),
+    CHECK(current_consumption_hourly_watt >=0)
 );

@@ -76,7 +76,7 @@ class Database():
     def load_home_day_data(self):
         query = (
                 f"""
-                SELECT consumption_watt, consumption_hourly_watt, created_at FROM Home_readings WHERE DATE(created_at) = CURDATE(); 
+                SELECT current_consumption_watt, current_consumption_hourly_watt, created_at FROM Home_readings WHERE DATE(created_at) = CURDATE(); 
                 """
             )
         
@@ -89,7 +89,7 @@ class Database():
     def load_solar_day_data(self):
         query = (
                 f"""
-                SELECT generation_watt, generation_hourly_watt, created_at FROM Solar_pannel_readings WHERE DATE(created_at) = CURDATE(); 
+                SELECT current_generation_watt, current_generation_hourly_watt, created_at FROM Solar_pannel_readings WHERE DATE(created_at) = CURDATE(); 
                 """
             )
         

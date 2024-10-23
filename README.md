@@ -28,3 +28,10 @@ SolarX is a project aiming to practice a number of different tools, from the dat
 ### Demo
 
 ![](images/frontend.png)
+
+
+
+
+
+https://github.com/user-attachments/assets/3f5eab5e-ebdb-4df1-9d1b-84936c0704d8
+

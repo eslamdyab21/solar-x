@@ -59,6 +59,13 @@ def temp_processing():
 				month = info[1]
 				day = info[2]
 				hour = info[3]
+
+				if len(str(month)) == 1:
+					month = '0' + str(month)
+
+				if len(str(day)) == 1:
+					day = '0' + str(day)
+
 				date = str(year) + '-' + str(month) + '-' + str(day)
 
 

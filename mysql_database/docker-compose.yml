@@ -12,13 +12,14 @@ services:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - '3306:3306'
-    expose:
-      - '3306'
     volumes:
       - ./database-schema:/docker-entrypoint-initdb.d
       - solarx-db:/var/lib/mysql
       - "/etc/timezone:/etc/timezone:ro" 
       - "/etc/localtime:/etc/localtime:ro"
+    networks:
+      - solarx-network
+
 
   phpmyadmin:
     image: phpmyadmin:5.2
@@ -29,6 +30,9 @@ services:
 
     environment:
       - PMA_ARBITRARY=1
+    
+    networks:
+      - solarx-network
 
     restart: unless-stopped
 
@@ -36,3 +40,7 @@ services:
 volumes:
   solarx-db:
     name: solarx-db
+  
+networks:
+  solarx-network:
+    name: solarx-network

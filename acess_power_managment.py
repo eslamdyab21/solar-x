@@ -1,6 +1,8 @@
 import json
 import logging
 import random
+from dotenv import load_dotenv
+import os
 from Kafka_consumer import Kafka_consumer
 from Kafka_producer import Kafka_producer
 from bms import BMS
@@ -34,14 +36,16 @@ def access_power_managment(key, value, bms):
 
 
 def main():
+    load_dotenv()
+    KAFKA_BROKER_ADDRESS = os.getenv('KAFKA_BROKER_ADDRESS')
 
     consumer = Kafka_consumer(topic_name = ["solar_energy_data", "home_energy_consumption"])
-    consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
+    consumer.kafka_consumer_conf(broker_address = KAFKA_BROKER_ADDRESS, 
                                  consumer_group = "battery_proccessing",
                                  auto_offset_reset = "latest")
 
     producer = Kafka_producer(topic_name = "battery_data", message_key = "bms")
-    producer.kafka_producer_conf(broker_address = "localhost:9092")
+    producer.kafka_producer_conf(broker_address = KAFKA_BROKER_ADDRESS)
 
     bms = BMS()
     while True:

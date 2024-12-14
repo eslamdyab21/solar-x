@@ -2,6 +2,8 @@ import json
 import time
 import logging
 import datetime
+from dotenv import load_dotenv
+import os
 from Kafka_consumer import Kafka_consumer
 from Database import Database
 from Kafka_db import Kafka_db
@@ -9,8 +11,11 @@ from Kafka_db import Kafka_db
 
 
 def main():
+	load_dotenv()
+	KAFKA_BROKER_ADDRESS = os.getenv('KAFKA_BROKER_ADDRESS')
+
 	consumer = Kafka_consumer(topic_name = ["battery_data", "solar_energy_data", "home_energy_consumption"])
-	consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
+	consumer.kafka_consumer_conf(broker_address = KAFKA_BROKER_ADDRESS, 
 		                     consumer_group = "kafka_to_db",
 		                     auto_offset_reset = "latest")
 	

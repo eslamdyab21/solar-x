@@ -3,6 +3,8 @@ import logging
 import random
 import json
 import time
+from dotenv import load_dotenv
+import os
 from Kafka_producer import Kafka_producer
 from mysql_database.Database import Database
 
@@ -106,8 +108,11 @@ def home_energy_usage_per_second(HOME_USAGE_POWER):
 
 
 def main():
+    load_dotenv()
+    KAFKA_BROKER_ADDRESS = os.getenv('KAFKA_BROKER_ADDRESS')
+
     producer = Kafka_producer(topic_name = "home_energy_consumption", message_key = "home_energy") 
-    producer.kafka_producer_conf(broker_address = "localhost:9092")
+    producer.kafka_producer_conf(broker_address = KAFKA_BROKER_ADDRESS)
 
     HOME_USAGE_POWER = load_home_load()
     load_home_day_data_from_db()

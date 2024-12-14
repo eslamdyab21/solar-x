@@ -2,6 +2,8 @@ import json
 import logging
 import datetime 
 import random
+from dotenv import load_dotenv
+import os
 from Kafka_consumer import Kafka_consumer
 from Kafka_producer import Kafka_producer
 from mysql_database.Database import Database
@@ -129,14 +131,17 @@ def get_solar_energy(msg):
 
 
 def main():
+    load_dotenv()
+    KAFKA_BROKER_ADDRESS = os.getenv('KAFKA_BROKER_ADDRESS')
+
     consumer = Kafka_consumer(topic_name = ["weather_data"])
-    consumer.kafka_consumer_conf(broker_address = "localhost:9092", 
+    consumer.kafka_consumer_conf(broker_address = KAFKA_BROKER_ADDRESS, 
                                  consumer_group = "weather_reader4solarX",
                                  auto_offset_reset = "latest")
 
 
     producer = Kafka_producer(topic_name = "solar_energy_data", message_key = "solar_w")
-    producer.kafka_producer_conf(broker_address = "localhost:9092")
+    producer.kafka_producer_conf(broker_address = KAFKA_BROKER_ADDRESS)
 
     load_solar_day_data_from_db()
     

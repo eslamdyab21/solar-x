@@ -3,6 +3,8 @@ import datetime
 import time
 import random
 import pandas as pd
+from dotenv import load_dotenv
+import os
 from Kafka_producer import Kafka_producer
 
 
@@ -50,8 +52,11 @@ def get_weather(df):
 
 
 def main():
+    load_dotenv()
+    KAFKA_BROKER_ADDRESS = os.getenv('KAFKA_BROKER_ADDRESS')
+    
     producer = Kafka_producer(topic_name = "weather_data", message_key = "Cairo") 
-    producer.kafka_producer_conf(broker_address = "localhost:9092")
+    producer.kafka_producer_conf(broker_address = KAFKA_BROKER_ADDRESS)
     
     prev_day = None
     df = read_file()

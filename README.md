@@ -4,14 +4,15 @@ SolarX is a project aiming to practice a number of different tools, from the dat
 <br/>
 
 ### Technologies used in this project
-- Python for data processing and etl work
-- Kafka for handling the data stream per second
-- Nodejs and python for the backend
-- Web-socket for the communication between the backend and the frontend
-- React for the frontend
-- MySQL database to store the solar and home and batteries energies per hour (updated per minute)
-- Phpmyadmin for monitoring the database
-- Docker and Docker-compose
+- `Python` for data processing and etl work
+- `Kafka` for handling the data stream per second
+- `Nodejs` and python for the backend
+- `Web-socket` for the communication between the backend and the frontend
+- `React` for the frontend
+- `MySQL` database to store the solar and home and batteries energies per hour (updated per minute)
+- `Phpmyadmin` for monitoring the database
+- `Docker` and `Docker-compose`
+- `Nginx` as a reverse proxy to facilitate communication
 
 <br/>
 

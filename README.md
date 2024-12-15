@@ -28,7 +28,7 @@ SolarX is a project aiming to practice a number of different tools, from the dat
 
 ### Demo
 
-![](images/frontend2.png)
+![](images/frontend3.png)
 
 
 

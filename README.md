@@ -59,6 +59,9 @@ BROKER_HOST='kafka'
 
 
 3- under `frontend-gui`
+Note that `localhost` will need to e changed to the host domain name or host ip 
+if other devices on the host network will connect to the application
+
 ```env
 REACT_APP_WS1_URL="ws://localhost:4000/ws1/"
 REACT_APP_WS2_URL="ws://localhost:4000/ws2/"
@@ -69,3 +72,10 @@ REACT_APP_WS3_URL="ws://localhost:4000/ws3/"
 ```env
 KAFKA_BROKER_ADDRESS="kafka:9092"
 ```
+
+
+<br/>
+<br/>
+
+### A Datawarhouse project for this app is currently in progress in this repo
+https://github.com/eslamdyab21/SolarX-DWH

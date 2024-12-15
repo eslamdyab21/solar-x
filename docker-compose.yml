@@ -1,4 +1,36 @@
 services:
+  nginx_reverse_proxy:
+    image: nginx:1.27
+    container_name: nginx_reverse_proxy
+
+    volumes:
+      - ./nginx_reverse_proxy.conf:/etc/nginx/nginx.conf
+    ports:
+      - 4000:4000
+      - 8080:8080
+      - 9090:9090
+      - 9191:9191
+
+    networks:
+      - solarx-network
+
+    depends_on:
+      - solarx-gui
+      - solarx-backend
+
+  nginx_websocket_server:
+    image: nginx:1.27
+    container_name: nginx_websocket_server
+
+    volumes:
+      - ./nginx_websocket_server.conf:/etc/nginx/nginx.conf
+
+    networks:
+      - solarx-network
+
+    depends_on:
+      - solarx-backend
+
   solarx-gui:
     container_name: gui
 
@@ -8,8 +40,8 @@ services:
 
     command: npm run start
 
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     
     volumes:
       - ./frontend-gui/src:/app/src

@@ -38,7 +38,7 @@ def main():
         producer.kafka_produce(message_value = weather)
         logging.debug("Produced a message in weather_data topic")
         
-        time.sleep(10)
+        time.sleep(15)
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ def main():
     while True:
         msg = consumer.consume(timeout = 1)
         if msg is None:
-            # print("Waiting....")
+            # print("Waiting.....")
             pass    
         elif msg.error() is not None:
             raise Exception(msg.error())

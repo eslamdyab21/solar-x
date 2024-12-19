@@ -11,8 +11,8 @@ def process_weather(msg,  state: State):
     cloud_cover_percentage = msg["current"]["cloud_cover"]
     celcius = msg["current"]["temperature_2m"]
 
-    if time_stamp.split()[1].split(':')[0] == "24":
-        solar_power_w_accumulated = 0
+    # if time_stamp.split()[1].split(':')[0] == "24":
+    #     solar_power_w_accumulated = 0
     
     new_msg = {
         "time_stamp" : time_stamp,

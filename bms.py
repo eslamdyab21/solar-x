@@ -38,7 +38,7 @@ class BMS():
                 i +=1
 
         self.batteries_status['batteries']['battery_3']['current_energy_wh'] = 10000
-        self.batteries_status['batteries']['battery_2']['current_energy_wh'] = 8540
+        self.batteries_status['batteries']['battery_2']['current_energy_wh'] = 8600
         self.batteries_status['batteries']['battery_1']['current_energy_wh'] = 9860
 
 

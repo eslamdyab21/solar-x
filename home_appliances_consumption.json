@@ -1,5 +1,5 @@
 {
-    "Refrigerator": {"consumption": [300,1000], "time": "0:00-24:00"},
+    "Refrigerator": {"consumption": [300,1500], "time": "0:00-24:00"},
     "Electric Oven": {"consumption": [2000,5000], "time": "16:00-16:30,21:00-21:30"},
     "Electric Kettle": {"consumption": [1500,1500], "time": "7:00-7:15,12:00-12:15,16:30-17:00,21:30-22:00"},
     "Air Conditioner": {"consumption": [500,3000], "time": "0:00-24:00"},

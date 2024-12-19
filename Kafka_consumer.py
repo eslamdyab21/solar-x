@@ -25,3 +25,4 @@ class Kafka_consumer():
             self.consumer.store_offsets(msg)
 
         return msg
+    

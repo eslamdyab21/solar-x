@@ -17,7 +17,7 @@ SolarX is a project aiming to practice a number of different tools, from the dat
 <br/>
 
 ### Project Diagram
-![](images/solarx.drawio2.png)
+![](images/solarx3.drawio.png)
 
 <br/>
 

@@ -78,5 +78,5 @@ KAFKA_BROKER_ADDRESS="kafka:9092"
 <br/>
 <br/>
 
-### A Datawarhouse project for this app is currently in progress in this repo
-https://github.com/eslamdyab21/SolarX-DWH
+### A Lakehouse project for this app is currently in progress in this repo
+https://github.com/eslamdyab21/SolarX-Lakehouse

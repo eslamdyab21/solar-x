@@ -1,4 +1,5 @@
 from quixstreams import Application
+from quixstreams import message_context
 
 class Kafka_consumer():
     def __init__(self, topic_name):
@@ -24,5 +25,6 @@ class Kafka_consumer():
         if msg and store_offset:
             self.consumer.store_offsets(msg)
 
+        print('Current offset: ', message_context().offset)
         return msg
     

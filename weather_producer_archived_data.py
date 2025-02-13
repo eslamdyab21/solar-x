@@ -24,8 +24,8 @@ def read_file():
 
 
 def get_weather(df):
-    msg = {'current':{'is_day':1, 'cloud_cover':random.randint(100,1000)/1000,
-                  'wind_speed_10m':20, 'temperature_2m':35, 'solar_intensity':0, 'time_stamp':0}, 
+    msg = {'current':{ 'time_stamp':0, 'is_day':1, 'cloud_cover':random.randint(100,1000)/1000,
+                  'wind_speed_10m':20, 'temperature_2m':35, 'solar_intensity':0}, 
             'daily':{'sunrise':['2024-07-09T05:11:11'], 'sunset':['2024-07-09T18:11:11']}}
     
     time_stamp = datetime.datetime.now().replace(microsecond=0)
@@ -40,6 +40,7 @@ def get_weather(df):
         solar_intensity = df['solar_intensity'].values[0]
         temp = df['temp'].values[0]
 
+        msg['current']['time_stamp'] = str(time_stamp)
         msg['current']['is_day'] = int(solar_intensity > 0)
         msg['current']['temperature_2m'] = float(temp)
         msg['current']['cloud_cover'] = float(1 - (solar_intensity/900))

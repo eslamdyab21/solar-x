@@ -44,36 +44,16 @@ def get_time_in_seconds(t):
     return hours + minutes + seconds
 
 
-def get_power_w_accumulated(sun_rise, sun_set, time_stamp, celcius, solar_intensity, 
-                            solar_panel_rating_w_sec, solar_panel_rating_w_5ms, 
-                            solar_intensity_power_rating, temp_power_rating, is_day, 
-                            cloud_cover_percentage):
+def get_power_w_accumulated(time_stamp, celcius, solar_intensity, 
+                            solar_panel_rating_w_sec, solar_intensity_power_rating,
+                            temp_power_rating):
     
     global solar_power_w_accumulated, solar_power_w, solar_power_w_accumulated_hourly_set
 
-    # sun_rise_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_rise)).split()[1])
-    # sun_set_t = get_time_in_seconds(str(datetime.datetime.fromisoformat(sun_set)).split()[1])
-    # low_peak_threshold = get_time_in_seconds('09:60:60')
-    # high_peak_threshold = get_time_in_seconds('14:60:60')
-    # # current_t 0 to 246060
-    # # sun_rise_t:10 --> 0:100%, 10:1500 --> 100% , 15:sun_set_t --> 100%:0
-    # current_t =  get_time_in_seconds(time_stamp.split()[1])
-    
-    # if current_t >= sun_rise_t and current_t <= low_peak_threshold:
-    #     t_presentage = (current_t-sun_rise_t)/(low_peak_threshold-sun_rise_t)
-
-    # elif current_t >= low_peak_threshold and current_t <= high_peak_threshold:
-    #     t_presentage = 1
-
-    # elif current_t >= high_peak_threshold and current_t <= sun_set_t:
-    #     t_presentage = 1 - (current_t-high_peak_threshold)/(sun_set_t-high_peak_threshold)
-        
-    # else:
-    #     t_presentage = 0
         
     random_per = random.randint(650,1000)/1000
 
-    solar_power_w = solar_panel_rating_w_5ms * random_per * (1 /(1 - (temp_power_rating - celcius)/(temp_power_rating))) \
+    solar_power_w = solar_panel_rating_w_sec * random_per * (1 /(1 - (temp_power_rating - celcius)/(temp_power_rating))) \
                                          * (1 - (solar_intensity_power_rating - solar_intensity)/solar_intensity_power_rating)
                                             
                                                                                      
@@ -111,25 +91,19 @@ def get_power_w_accumulated_hourly(current_hour):
 def get_solar_energy(msg):
     global solar_power_w, solar_power_w_accumulated, solar_power_w_accumulated_hourly_set
     
-    time_stamp = str(datetime.datetime.now().replace(microsecond=0))
-    # time_stamp = str(datetime.datetime.fromisoformat(msg["current"]["time"]))
-    is_day = msg["current"]["is_day"]
-    wind_speed = msg["current"]["wind_speed_10m"]
-    cloud_cover_percentage = msg["current"]["cloud_cover"]
+    # time_stamp = str(datetime.datetime.now().replace(microsecond=0))
+    time_stamp = str(msg["current"]["time_stamp"])
     celcius = msg["current"]["temperature_2m"]
     solar_intensity = msg["current"]["solar_intensity"]
     solar_panel_rating_kwh = 10
     solar_panel_rating_w_sec = solar_panel_rating_kwh*1000/3600
     solar_intensity_power_rating = 1000
     temp_power_rating = 25
-    solar_panel_rating_w_5ms = solar_panel_rating_kwh*1000/(60*60*1000/5)
-    sun_rise = msg["daily"]["sunrise"][0]
-    sun_set = msg["daily"]["sunset"][0]
 
-    get_power_w_accumulated(sun_rise, sun_set, time_stamp, celcius, solar_intensity, 
-                            solar_panel_rating_w_sec, solar_panel_rating_w_5ms, 
-                            solar_intensity_power_rating, temp_power_rating, is_day, 
-                            cloud_cover_percentage)
+
+    get_power_w_accumulated(time_stamp, celcius, solar_intensity, 
+                            solar_panel_rating_w_sec, solar_intensity_power_rating,
+                            temp_power_rating)
 
 
     current_hour = time_stamp.split()[1].split(':')[0]
@@ -163,17 +137,19 @@ def main():
     
     value = None
     while True:
-        msg = consumer.consume(timeout = 1, store_offset = True)
+        msg = consumer.consume(timeout = 1.0, store_offset = True)
 
         if msg is None:
             print("Waiting....")   
+
         elif msg.error() is not None:
             raise Exception(msg.error())
+        
         else:
             key = msg.key().decode("utf-8")
             value = json.loads(msg.value())
             offset = msg.offset()
-            # logging.debug(f"{offset} {key} {value}")
+            logging.debug(f"{offset} {key} {value}")
 
             value = dict(value)
             solar_energy = get_solar_energy(value)
@@ -181,10 +157,10 @@ def main():
             logging.debug(f"{solar_energy}")
             
         
-        if value:
-            solar_energy = get_solar_energy(value)
-            producer.kafka_produce(message_value = solar_energy)
-            logging.debug(f"{solar_energy}")
+        # if value and msg is not None:
+        #     solar_energy = get_solar_energy(value)
+        #     producer.kafka_produce(message_value = solar_energy)
+        #     logging.debug(f"{solar_energy}")
 
 
 if __name__ == "__main__":

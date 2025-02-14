@@ -101,11 +101,9 @@ def main():
             value = json.loads(msg.value())
             offset = msg.offset()
 
-            logging.debug(f"{offset} {key} {value}")
+            # logging.debug(f"{offset} {key} {value}")
 
             if data_of_same_second(key, dict(value), bms):
-                # access_power_managment(key, dict(value), bms)
-
                 msg = bms.batteries_status.copy()
                 msg['time_stamp'] = value['time_stamp']
 

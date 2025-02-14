@@ -90,6 +90,8 @@ services:
 
     depends_on:
       - kafka
+    
+    command: tail -f /dev/null
 
     networks:
       - solarx-network

@@ -1,5 +1,6 @@
 # **Solar-X: A High Performance Real-Time Solar Energy Monitoring and Management System**
 
+![](images/frontend3.png)
 ### **Overview**
 
 Solar-X is a **real-time solar energy monitoring and management system** designed to track, analyze, and optimize solar energy generation, battery storage, and home power consumption. The system leverages **Kafka for real-time data streaming**, a **Relational Mysql database** for long-term storage, **Node.js-based backend**, **React.js real-time dashboard**, **Nginx** as web-server and reverse proxy and **Docker and Docker Compose** for easy deployment.
@@ -15,10 +16,12 @@ The data powering Solar-X is collected from various energy sources and is logged
     - **Solar Panels**: Measures real-time energy generation.
     - **Batteries**: Tracks charge/discharge states and capacity.
     - **Home Energy Consumption**: Monitors device-level power usage.
+
 - **Kafka Producers** (`solar_producer`, `batteries_producer`, `home_energy_consumption_producer`) push energy readings into dedicated topics:
     - `solar_energy_topic`
     - `batteries_usage_topic`
     - `home_usage_topic`
+
 - **Kafka Consumer**: 
 	- `kafka_to_db` Reads and processes data from Kafka and inserts it into the **database hourly and update it every minute**.
 	- `backend` Reads and processes data from Kafka and inserts and pass it to React frontend with web-socket connections.

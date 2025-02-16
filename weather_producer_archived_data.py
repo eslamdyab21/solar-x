@@ -40,12 +40,13 @@ def get_weather(df):
         solar_intensity = df['solar_intensity'].values[0]
         temp = df['temp'].values[0]
 
-        msg['current']['time_stamp'] = str(time_stamp)
+        
         msg['current']['is_day'] = int(solar_intensity > 0)
         msg['current']['temperature_2m'] = float(temp)
         msg['current']['cloud_cover'] = float(1 - (solar_intensity/900))
         msg['current']['solar_intensity'] = float(solar_intensity)
 
+    msg['current']['time_stamp'] = str(time_stamp)
     msg['daily']['sunrise'][0] = msg['daily']['sunrise'][0].replace('05', '0' + str(sunrise_hour))
     msg['daily']['sunset'][0] = msg['daily']['sunset'][0].replace('18', str(sunset_hour))
 

@@ -1,3 +1,4 @@
+![](images/diagram-export-2-19-2025-7_39_14-AM.png)
 # **Solar-X: A High Performance Real-Time Solar Energy Monitoring and Management System**
 
 ![](images/frontend3.png)
@@ -75,8 +76,8 @@ The data powering Solar-X is collected from various energy sources and is logged
 
 <br/>
 
-### Project Diagram
-![](images/solarx3.drawio.png)
+### A Lakehouse System Project for this App is in this Repo
+https://github.com/eslamdyab21/SolarX-Lakehouse
 
 <br/>
 
@@ -137,5 +138,3 @@ KAFKA_BROKER_ADDRESS="kafka:9092"
 <br/>
 <br/>
 
-### A Lakehouse project for this app is currently in progress in this repo
-https://github.com/eslamdyab21/SolarX-Lakehouse
